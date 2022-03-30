@@ -1,0 +1,81 @@
+﻿<Window x:Class="CodeGeneration.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CodeGeneration"
+        mc:Ignorable="d"
+        Title="XM代码生成工具" Height="500" Width="1000" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+    <Grid x:Name="gridContent">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="500" x:Name="leftContent"></ColumnDefinition>
+            <ColumnDefinition Width="*" x:Name="rightContent"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <GroupBox Grid.Column="0"  x:Name="GroupDataBaseInfo" Header="数据库信息" HorizontalAlignment="Center"
+                  Width="500">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="200*"/>
+                </Grid.RowDefinitions>
+                <Grid Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10*"/>
+                        <RowDefinition Height="10*"/>
+                        <RowDefinition Height="10*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60*"/>
+                        <ColumnDefinition Width="200*"/>
+                        <ColumnDefinition Width="70*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" Content="选择DBKey" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                    <ComboBox Grid.Row="0" Grid.Column="1" Name="ddlDbKey" Margin="5" SelectedItem="{Binding  Path=Dtype, Mode=TwoWay}"/>
+                    <Button  Grid.Row="0" Grid.Column="2" x:Name="btnSure" Content="确定"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10 5 10 5"  Width="75" Height="20" Click="btnSure_Click"/>
+
+                    <Label Grid.Row="1" Grid.Column="0" Content="选择数据库" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                    <ComboBox Grid.Row="1" Grid.Column="1" Name="ddlDB" Margin="5" SelectedItem="{Binding  Path=Dtype, Mode=TwoWay}"/>
+                    <Button  Grid.Row="1" Grid.Column="2" x:Name="btnDBSure" Content="确定"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10 5 10 5"  Width="75" Height="20" Click="btnDBSure_Click" />
+                    
+                    <Label Grid.Row="2" Grid.Column="0" Content="保存路径" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                    <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtOutput" Margin="5" Grid.ColumnSpan="2" />
+
+                </Grid>
+                <StackPanel  Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center" Height="30">
+                    <Button  x:Name="btnStart" Content="开始"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,5,0"  Width="150" Height="25" Click="btnStart_Click"/>
+                </StackPanel>
+                <Grid Grid.Row="2" Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10*"></ColumnDefinition>
+                        <ColumnDefinition Width="30"></ColumnDefinition>
+                        <ColumnDefinition Width="10*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <ListBox Grid.Column="0" x:Name="noselectContent">
+                    </ListBox>
+                    <StackPanel Grid.Column="1" Margin="4" Orientation="Vertical" VerticalAlignment="Center">
+                        <Button Margin="0 0 0 5" x:Name="btnLeftAll" Click="btnLeftAll_Click">&gt;&gt;</Button>
+                        <Button Margin="0 0 0 5" x:Name="btnLeftOne" Click="btnLeftOne_Click">&gt;</Button>
+                        <Button Margin="0 0 0 5" x:Name="btnRightOne" Click="btnRightOne_Click">&lt;</Button>
+                        <Button Margin="0 0 0 5" x:Name="btnRightAll" Click="btnRightAll_Click">&lt;&lt;</Button>
+                    </StackPanel>
+                    <ListBox Grid.Column="2" x:Name="selectContent">
+                    </ListBox>
+
+                </Grid>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Column="1"  x:Name="GroupInfo" Header="信息" HorizontalAlignment="Center"
+                  >
+            <RichTextBox x:Name="rtbMessage" HorizontalAlignment="Right" Margin="0,0,5,0" IsReadOnly="True" VerticalAlignment="Top"  
+                         IsDocumentEnabled = "True" VerticalScrollBarVisibility="Auto"  
+                         HorizontalScrollBarVisibility="Auto"
+                         Height="440"
+                      >
+                <FlowDocument LineHeight="2"/>
+            </RichTextBox>
+        </GroupBox>
+    </Grid>
+
+</Window>

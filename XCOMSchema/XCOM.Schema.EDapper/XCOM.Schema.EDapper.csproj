@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="6.0.1" />
+    <PackageReference Include="MySql.Data" Version="8.0.27" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.41" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XCOM.Schema.Data\XCOM.Schema.Data.csproj" />
+    <ProjectReference Include="..\XCOM.Schema.Standard\XCOM.Schema.Standard.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Model\MsSqlServer\" />
+    <Folder Include="Model\SQLite\" />
+    <Folder Include="Realization\MsSqlServer\" />
+    <Folder Include="Realization\SQLite\" />
+  </ItemGroup>
+
+</Project>
