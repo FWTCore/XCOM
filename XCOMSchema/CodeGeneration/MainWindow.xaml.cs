@@ -43,7 +43,7 @@ namespace CodeGeneration
             this.ddlDbKey.DisplayMemberPath = "Key";
             this.ddlDbKey.SelectedValuePath = "Key";
             this.txtOutput.Text = this.generationServer.GetTest();
-                //XMConfiguration.GetConfigOrDefault("Appsettings:FileOutput");
+            //XMConfiguration.GetConfigOrDefault("Appsettings:FileOutput");
 
 
         }
