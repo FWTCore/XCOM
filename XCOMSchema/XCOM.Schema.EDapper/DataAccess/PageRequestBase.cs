@@ -44,7 +44,7 @@ namespace XCOM.Schema.EDapper.DataAccess
             {
                 dir = "ASC";
             }
-            if (SortBy.Contains("&"))
+            if (SortBy.Contains('&'))
             {
                 resultSql.Append(' ').Append(string.Join(",", SortBy.Split('&').Select(e => $" {e} {dir}").ToArray()));
             }

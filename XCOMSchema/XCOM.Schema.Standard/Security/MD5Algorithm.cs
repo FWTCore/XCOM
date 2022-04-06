@@ -40,12 +40,5 @@ namespace XCOM.Schema.Standard.Security
             return Convert.ToBase64String(array3);
         }
 
-        public string Encrypt(string plainString, int saltLength)
-        {
-            byte[] array = new byte[saltLength];
-            RNGCryptoServiceProvider rNGCryptoServiceProvider = new RNGCryptoServiceProvider();
-            rNGCryptoServiceProvider.GetBytes(array);
-            return Encrypt(plainString, array);
-        }
     }
 }
