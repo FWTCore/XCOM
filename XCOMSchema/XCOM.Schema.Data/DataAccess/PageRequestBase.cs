@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XCOM.Schema.EDapper.DataAccess
+namespace XCOM.Schema.Data.DataAccess
 {
     public class PageRequestBase
     {

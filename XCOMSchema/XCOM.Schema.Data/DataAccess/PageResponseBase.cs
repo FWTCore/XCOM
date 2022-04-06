@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XCOM.Schema.EDapper.DataAccess
+namespace XCOM.Schema.Data.DataAccess
 {
     /// <summary>
     /// 通用分页返回
@@ -38,4 +38,3 @@ namespace XCOM.Schema.EDapper.DataAccess
         public long TotalPages { get; set; }
     }
 }
-
