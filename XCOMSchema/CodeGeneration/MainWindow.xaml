@@ -15,12 +15,14 @@
                   Width="500">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="150"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="200*"/>
                 </Grid.RowDefinitions>
                 <Grid Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" >
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="10*"/>
+                        <RowDefinition Height="10*"/>
                         <RowDefinition Height="10*"/>
                         <RowDefinition Height="10*"/>
                         <RowDefinition Height="10*"/>
@@ -37,9 +39,24 @@
                     <Label Grid.Row="1" Grid.Column="0" Content="选择数据库" HorizontalAlignment="Right" VerticalAlignment="Center" />
                     <ComboBox Grid.Row="1" Grid.Column="1" Name="ddlDB" Margin="5" SelectedItem="{Binding  Path=Dtype, Mode=TwoWay}"/>
                     <Button  Grid.Row="1" Grid.Column="2" x:Name="btnDBSure" Content="确定"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10 5 10 5"  Width="75" Height="20" Click="btnDBSure_Click" />
-                    
+
                     <Label Grid.Row="2" Grid.Column="0" Content="保存路径" HorizontalAlignment="Right" VerticalAlignment="Center" />
-                    <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtOutput" Margin="5" Grid.ColumnSpan="2" />
+                    <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtOutput" Margin="5" Grid.ColumnSpan="2" IsReadOnly="True" />
+
+                    <Label Grid.Row="3" Grid.Column="0" Content="命名空间" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                    <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtNameSpace" Margin="5" Grid.ColumnSpan="2" />
+
+                    <Label Grid.Row="4" Grid.Column="0" Content="生成对象" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                    <Grid Grid.Row="4" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Grid.Column="0" x:Name="cbEntity" Content="Entity" VerticalAlignment="Center"></CheckBox>
+                        <CheckBox Grid.Column="1" x:Name="cbRepository" Content="Repository" VerticalAlignment="Center"></CheckBox>
+                        <CheckBox Grid.Column="2" x:Name="cbServer" Content="Server" VerticalAlignment="Center"></CheckBox>
+                    </Grid>
 
                 </Grid>
                 <StackPanel  Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center" Height="30">
@@ -71,7 +88,7 @@
             <RichTextBox x:Name="rtbMessage" HorizontalAlignment="Right" Margin="0,0,5,0" IsReadOnly="True" VerticalAlignment="Top"  
                          IsDocumentEnabled = "True" VerticalScrollBarVisibility="Auto"  
                          HorizontalScrollBarVisibility="Auto"
-                         Height="440"
+                         Height="460"
                       >
                 <FlowDocument LineHeight="2"/>
             </RichTextBox>

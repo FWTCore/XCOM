@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using XCOM.Schema.Data.DataAccess;
 using XCOM.Schema.EDapper.DataAccess;
 
 namespace XCOM.Schema.EDapper.Realization

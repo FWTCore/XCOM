@@ -33,7 +33,8 @@ namespace XCOM.Schema.EDapper.Utility
                     {
                         if (!string.IsNullOrWhiteSpace(dBConnection.IsEncrypt) && (dBConnection.IsEncrypt.Trim().ToUpper() == "Y" || dBConnection.IsEncrypt.Trim().ToUpper() == "YES"))
                         {
-                            dBConnection.ConnectionString = XMCrypto.Decrypt(dBConnection.ConnectionString);
+                            //dBConnection.ConnectionString = XMCrypto.Decrypt(dBConnection.ConnectionString);
+                            dBConnection.ConnectionString = dBConnection.ConnectionString;
                         }
 
                     });

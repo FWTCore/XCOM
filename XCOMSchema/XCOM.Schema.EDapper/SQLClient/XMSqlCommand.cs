@@ -39,6 +39,30 @@ namespace XCOM.Schema.EDapper.SQLClient
             }
         }
 
+        public XMSqlCommand(string sqlKey, string dbKey)
+        {
+            if (string.IsNullOrWhiteSpace(sqlKey))
+            {
+                throw new Exception("sqlKey 不能为空!");
+            }
+            if (string.IsNullOrWhiteSpace(dbKey))
+            {
+                throw new Exception("dbKey 不能为空!");
+            }
+            sqlNode = XMSQLScript.GetSQLList.Find(f => f.SQLKey.Trim().ToUpper() == sqlKey.Trim().ToUpper());
+            if (sqlNode == null)
+            {
+                throw new Exception($"SQLKey:{sqlKey} 无效!");
+            }
+            _commandText.Clear().Append(sqlNode.Text);
+
+            _dbConfig = XMDBConfig.ConfigSetting.DBConnectionList.FirstOrDefault(f => f.Key.Trim().ToUpper() == dbKey);
+            if (_dbConfig == null)
+            {
+                throw new Exception($"SQLKey:{dbKey} 数据库配置无效!");
+            }
+        }
+
         public override void Dispose(bool disposing)
         {
             if (disposing)

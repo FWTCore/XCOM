@@ -31,11 +31,15 @@ namespace CodeGeneration.Model
         /// <summary>
         /// 是否允许非空
         /// </summary>
-        public string IsNullable { get; set; }
+        public bool? IsNullable { get; set; }
         /// <summary>
         /// 是否自增
         /// </summary>
         public bool? IsAuto { get; set; }
+        /// <summary>
+        /// 是否主键
+        /// </summary>
+        public bool? IsPrimaryKey { get; set; }
         /// <summary>
         /// 备注
         /// </summary>

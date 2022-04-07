@@ -26,14 +26,12 @@ namespace CodeGeneration
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string dbKey = "";
 
-        private IGenerationServer generationServer;
+        private DBConnection _selectDB;
 
-        public MainWindow(IGenerationServer generationServer)
+        public MainWindow()
         {
             InitializeComponent();
-            this.generationServer = generationServer;
             this.Load();
         }
 
@@ -42,9 +40,7 @@ namespace CodeGeneration
             this.ddlDbKey.ItemsSource = XMDBConfig.ConfigSetting.DBConnectionList;
             this.ddlDbKey.DisplayMemberPath = "Key";
             this.ddlDbKey.SelectedValuePath = "Key";
-            this.txtOutput.Text = this.generationServer.GetTest();
-            //XMConfiguration.GetConfigOrDefault("Appsettings:FileOutput");
-
+            this.txtOutput.Text = XMConfiguration.GetConfigOrDefault("Appsettings:FileOutput");
 
         }
 
@@ -55,10 +51,9 @@ namespace CodeGeneration
                 MessageBox.Show("请选择dbKey", "提示");
                 return;
             }
-            var selectDbKey = (DBConnection)this.ddlDbKey.SelectedItem;
-            this.dbKey = selectDbKey.Key;
+            this._selectDB = (DBConnection)this.ddlDbKey.SelectedItem;
 
-            var cmd = new XMSqlCommand($"getDataBase_{this.dbKey}");
+            var cmd = new XMSqlCommand($"GetDataBase_{this._selectDB.DBType}", this._selectDB.Key);
             var resultDataList = cmd.Query<string>();
             if (resultDataList == null || resultDataList.Count() == 0)
             {
@@ -125,6 +120,24 @@ namespace CodeGeneration
 
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
+            var isSelectObject = false;
+            if (this.cbEntity.IsChecked != null && this.cbEntity.IsChecked == true)
+            {
+                isSelectObject = true;
+            }
+            if (!isSelectObject && this.cbRepository.IsChecked != null && this.cbRepository.IsChecked == true)
+            {
+                isSelectObject = true;
+            }
+            if (!isSelectObject && this.cbServer.IsChecked != null && this.cbServer.IsChecked == true)
+            {
+                isSelectObject = true;
+            }
+            if (!isSelectObject)
+            {
+                MessageBox.Show("请选择生成对象", "提示");
+                return;
+            }
             var dealTableData = GetTableEntities();
             if (dealTableData != null && dealTableData.Count > 0)
             {
@@ -134,7 +147,7 @@ namespace CodeGeneration
 
         private List<TableEntity> GetTableEntities()
         {
-            var cmd = new XMSqlCommand($"getTable_{this.dbKey}");
+            var cmd = new XMSqlCommand($"GetTable_{this._selectDB.DBType}", this._selectDB.Key);
             cmd.SetParameter("@dbName", this.ddlDB.SelectedItem);
             return cmd.Query<TableEntity>().ToList();
         }
