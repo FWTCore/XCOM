@@ -97,7 +97,7 @@ namespace CodeGeneration.Utility
                 entityContent.Clear();
                 var entityName = UNCHelper.GenVarName(titem.TableName);
                 var firstLetterName = UNCHelper.FirstLetter(entityName);
-                entityContent.AppendLine($"using {spaceNamePrefix}Dto;");
+                entityContent.AppendLine($"using {spaceNamePrefix}DTO;");
                 entityContent.AppendLine($"using {spaceNamePrefix}Entity;");
                 entityContent.AppendLine($"using {spaceNamePrefix}IRepository;");
                 entityContent.AppendLine($"using {spaceNamePrefix}IService;");
@@ -126,7 +126,7 @@ namespace CodeGeneration.Utility
 
                 entityContent.Clear();
 
-                entityContent.AppendLine($"using {spaceNamePrefix}Dto;");
+                entityContent.AppendLine($"using {spaceNamePrefix}DTO;");
                 entityContent.AppendLine($"using {spaceNamePrefix}Entity;");
                 entityContent.AppendLine("using System;");
                 entityContent.AppendLine("using System.Collections.Generic;");
@@ -154,7 +154,7 @@ namespace CodeGeneration.Utility
                 entityContent.Clear();
                 var entityName = UNCHelper.GenVarName(titem.TableName);
                 var firstLetterName = UNCHelper.FirstLetter(entityName);
-                entityContent.AppendLine($"using {spaceNamePrefix}Dto;");
+                entityContent.AppendLine($"using {spaceNamePrefix}DTO;");
                 entityContent.AppendLine($"using {spaceNamePrefix}Entity;");
                 entityContent.AppendLine($"using {spaceNamePrefix}IRepository;");
                 entityContent.AppendLine("using System;");
@@ -177,7 +177,7 @@ namespace CodeGeneration.Utility
 
                 entityContent.Clear();
 
-                entityContent.AppendLine($"using {spaceNamePrefix}Dto;");
+                entityContent.AppendLine($"using {spaceNamePrefix}DTO;");
                 entityContent.AppendLine($"using {spaceNamePrefix}Entity;");
                 entityContent.AppendLine("using System;");
                 entityContent.AppendLine("using System.Collections.Generic;");
