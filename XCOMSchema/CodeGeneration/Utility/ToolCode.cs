@@ -97,7 +97,6 @@ namespace CodeGeneration.Utility
                 entityContent.Clear();
                 var entityName = UNCHelper.GenVarName(titem.TableName);
                 var firstLetterName = UNCHelper.FirstLetter(entityName);
-                entityContent.AppendLine($"using {spaceNamePrefix}DTO;");
                 entityContent.AppendLine($"using {spaceNamePrefix}Entity;");
                 entityContent.AppendLine($"using {spaceNamePrefix}IRepository;");
                 entityContent.AppendLine($"using {spaceNamePrefix}IService;");
@@ -105,18 +104,19 @@ namespace CodeGeneration.Utility
                 entityContent.AppendLine("using System.Collections.Generic;");
                 entityContent.AppendLine("using System.Text;").Append('\n');
 
-                entityContent.AppendLine("/// <summary>");
-                entityContent.AppendLine($"/// {titem.TableComment}");
-                entityContent.AppendLine("/// <summary>");
                 entityContent.AppendLine($"namespace {spaceNamePrefix}Service");
                 entityContent.AppendLine("{");
+
+                entityContent.AppendLine("\t/// <summary>");
+                entityContent.AppendLine($"\t/// {titem.TableComment}");
+                entityContent.AppendLine("\t/// <summary>");
                 entityContent.AppendLine($"\tpublic class {entityName}Service : I{entityName}Service");
                 entityContent.AppendLine("\t{");
 
                 entityContent.AppendLine($"\t\tprivate I{entityName}Repository _{firstLetterName}Repository {{ get; set; }}").Append('\n');
                 entityContent.AppendLine($"\t\tpublic {entityName}Service(I{entityName}Repository _{firstLetterName})");
                 entityContent.AppendLine("\t\t{");
-                entityContent.AppendLine($"\t\t\t_{firstLetterName}Repository = _{firstLetterName}");
+                entityContent.AppendLine($"\t\t\t_{firstLetterName}Repository = _{firstLetterName};");
                 entityContent.AppendLine("\t\t}");
 
                 entityContent.AppendLine("\t}");
@@ -126,16 +126,16 @@ namespace CodeGeneration.Utility
 
                 entityContent.Clear();
 
-                entityContent.AppendLine($"using {spaceNamePrefix}DTO;");
                 entityContent.AppendLine($"using {spaceNamePrefix}Entity;");
                 entityContent.AppendLine("using System;");
                 entityContent.AppendLine("using System.Collections.Generic;");
                 entityContent.AppendLine("using System.Text;").Append('\n');
-                entityContent.AppendLine("/// <summary>");
-                entityContent.AppendLine($"/// {titem.TableComment}");
-                entityContent.AppendLine("/// <summary>");
+
                 entityContent.AppendLine($"namespace {spaceNamePrefix}IService");
                 entityContent.AppendLine("{");
+                entityContent.AppendLine("\t/// <summary>");
+                entityContent.AppendLine($"\t/// {titem.TableComment}");
+                entityContent.AppendLine("\t/// <summary>");
                 entityContent.AppendLine($"\tpublic interface I{entityName}Service");
                 entityContent.AppendLine("\t{");
                 entityContent.AppendLine("\t}");
@@ -154,21 +154,20 @@ namespace CodeGeneration.Utility
                 entityContent.Clear();
                 var entityName = UNCHelper.GenVarName(titem.TableName);
                 var firstLetterName = UNCHelper.FirstLetter(entityName);
-                entityContent.AppendLine($"using {spaceNamePrefix}DTO;");
                 entityContent.AppendLine($"using {spaceNamePrefix}Entity;");
                 entityContent.AppendLine($"using {spaceNamePrefix}IRepository;");
                 entityContent.AppendLine("using System;");
                 entityContent.AppendLine("using System.Collections.Generic;");
                 entityContent.AppendLine("using System.Text;");
-                entityContent.AppendLine("using XCOM.Schema.EDapper.SQLClient").Append('\n');
-                entityContent.AppendLine("/// <summary>");
-                entityContent.AppendLine($"/// {titem.TableComment}");
-                entityContent.AppendLine("/// <summary>");
-                entityContent.AppendLine($"namespace {spaceNamePrefix}.Repository");
+                entityContent.AppendLine("using XCOM.Schema.EDapper.SQLClient;").Append('\n');
+   
+                entityContent.AppendLine($"namespace {spaceNamePrefix}Repository");
                 entityContent.AppendLine("{");
+                entityContent.AppendLine("\t/// <summary>");
+                entityContent.AppendLine($"\t/// {titem.TableComment}");
+                entityContent.AppendLine("\t/// <summary>");
                 entityContent.AppendLine($"\tpublic class {entityName}Repository : XMContext<{entityName}Entity>, I{entityName}Repository");
                 entityContent.AppendLine("\t{");
-
                 entityContent.AppendLine("\t}");
                 entityContent.AppendLine("}");
 
@@ -177,16 +176,17 @@ namespace CodeGeneration.Utility
 
                 entityContent.Clear();
 
-                entityContent.AppendLine($"using {spaceNamePrefix}DTO;");
                 entityContent.AppendLine($"using {spaceNamePrefix}Entity;");
                 entityContent.AppendLine("using System;");
                 entityContent.AppendLine("using System.Collections.Generic;");
-                entityContent.AppendLine("using System.Text;").Append('\n');
-                entityContent.AppendLine("/// <summary>");
-                entityContent.AppendLine($"/// {titem.TableComment}");
-                entityContent.AppendLine("/// <summary>");
+                entityContent.AppendLine("using System.Text;");
+                entityContent.AppendLine("using XCOM.Schema.EDapper.SQLClient;").Append('\n');
+   
                 entityContent.AppendLine($"namespace {spaceNamePrefix}IRepository");
                 entityContent.AppendLine("{");
+                entityContent.AppendLine("\t/// <summary>");
+                entityContent.AppendLine($"\t/// {titem.TableComment}");
+                entityContent.AppendLine("\t/// <summary>");
                 entityContent.AppendLine($"\tpublic interface I{entityName}Repository : IXMContext<{entityName}Entity>");
                 entityContent.AppendLine("\t{");
                 entityContent.AppendLine("\t}");
