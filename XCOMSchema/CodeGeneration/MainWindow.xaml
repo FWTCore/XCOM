@@ -71,10 +71,10 @@
                     <ListBox Grid.Column="0" x:Name="noselectContent">
                     </ListBox>
                     <StackPanel Grid.Column="1" Margin="4" Orientation="Vertical" VerticalAlignment="Center">
-                        <Button Margin="0 0 0 5" x:Name="btnLeftAll" Click="btnLeftAll_Click">&gt;&gt;</Button>
-                        <Button Margin="0 0 0 5" x:Name="btnLeftOne" Click="btnLeftOne_Click">&gt;</Button>
-                        <Button Margin="0 0 0 5" x:Name="btnRightOne" Click="btnRightOne_Click">&lt;</Button>
-                        <Button Margin="0 0 0 5" x:Name="btnRightAll" Click="btnRightAll_Click">&lt;&lt;</Button>
+                        <Button Margin="0 0 0 5" x:Name="btnLeftAll" Click="btnRightAll_Click">&gt;&gt;</Button>
+                        <Button Margin="0 0 0 5" x:Name="btnLeftOne" Click="btnRightOne_Click">&gt;</Button>
+                        <Button Margin="0 0 0 5" x:Name="btnRightOne" Click="btnLeftOne_Click">&lt;</Button>
+                        <Button Margin="0 0 0 5" x:Name="btnRightAll" Click="btnLeftAll_Click">&lt;&lt;</Button>
                     </StackPanel>
                     <ListBox Grid.Column="2" x:Name="selectContent">
                     </ListBox>

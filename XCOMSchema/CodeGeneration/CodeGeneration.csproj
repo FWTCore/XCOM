@@ -35,7 +35,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\XCOM.Schema.Data\XCOM.Schema.Data.csproj" />
     <ProjectReference Include="..\XCOM.Schema.EDapper\XCOM.Schema.EDapper.csproj" />
+    <ProjectReference Include="..\XCOM.Schema.Standard\XCOM.Schema.Standard.csproj" />
   </ItemGroup>
 
   <ItemGroup>

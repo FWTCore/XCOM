@@ -9,6 +9,10 @@ namespace CodeGeneration.Model
     public class TableColumnNameEntity
     {
         /// <summary>
+        /// 表字段
+        /// </summary>
+        public string TableName { get; set; }
+        /// <summary>
         /// 字段名称
         /// </summary>
         public string ColumnName { get; set; }
@@ -31,15 +35,15 @@ namespace CodeGeneration.Model
         /// <summary>
         /// 是否允许非空
         /// </summary>
-        public bool? IsNullable { get; set; }
+        public bool IsNullable { get; set; }
         /// <summary>
         /// 是否自增
         /// </summary>
-        public bool? IsAuto { get; set; }
+        public bool IsAuto { get; set; }
         /// <summary>
         /// 是否主键
         /// </summary>
-        public bool? IsPrimaryKey { get; set; }
+        public bool IsPrimaryKey { get; set; }
         /// <summary>
         /// 备注
         /// </summary>

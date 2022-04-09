@@ -10,5 +10,6 @@ namespace XCOM.Schema.XUnitProjectTest.Repository
 {
     public class ExpressRepository : XMContext<ExpressEntity>
     {
+
     }
 }
