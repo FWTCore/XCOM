@@ -33,6 +33,9 @@ namespace XCOM.Schema.Standard.System
         /// 释放
         /// </summary>
         /// <param name="disposing"></param>
-        public abstract void Dispose(bool disposing);
+        public virtual void Dispose(bool disposing)
+        {
+
+        }
     }
 }

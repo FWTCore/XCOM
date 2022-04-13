@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Autofac;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XCOM.Schema.Core.Infrastructure.IOC;
 
 namespace XCOM.Schema.Core.Infrastructure
 {
@@ -12,21 +14,21 @@ namespace XCOM.Schema.Core.Infrastructure
         {
 
         }
-        public static void Build()
+        public static void Build(ILifetimeScope lifetimeScope)
         {
             try
             {
-
+                XMIOC.InitializeWith(lifetimeScope);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-
+                throw new Exception("PFTIoC初始化异常", ex);
             }
         }
 
         public static void Run()
         {
-
+            XMIOC.ResolveAll<IBootstrapperTask>()?.ToList()?.ForEach(t => t?.Execute());
         }
 
 
