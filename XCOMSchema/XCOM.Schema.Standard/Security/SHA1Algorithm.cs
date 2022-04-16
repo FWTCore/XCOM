@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace XCOM.Schema.Standard.Security
 {
-    public class SHA1Algorithm : ICrypto
+    public class SHA1Algorithm 
     {
         private readonly SHA1 sha1;
 

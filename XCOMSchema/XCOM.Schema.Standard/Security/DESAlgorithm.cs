@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace XCOM.Schema.Standard.Security
 {
-    public class DESAlgorithm : ICrypto
+    public class DESAlgorithm 
     {
 
         private static byte[] s_DesIV = new byte[8] { 29, 135, 52, 9, 65, 3, 97, 98 };

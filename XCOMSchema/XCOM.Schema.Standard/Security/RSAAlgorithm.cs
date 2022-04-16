@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace XCOM.Schema.Standard.Security
 {
-    public class RSAAlgorithm : ICrypto
+    public class RSAAlgorithm 
     {
         public string Decrypt(string encryptedBase64ConnectString)
         {
