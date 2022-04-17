@@ -17,7 +17,7 @@ namespace XCOM.Schema.Core.Infrastructure.IOC
             {
                 throw new Exception("方法 InitializeWith(ILifetimeScope lifetimeScope) 的 lifetimeScope 为空");
             }
-            _resolver = new AutofacDependencyResolver(lifetimeScope);
+            _resolver = new AutofacLifetimeResolver(lifetimeScope);
         }
 
 

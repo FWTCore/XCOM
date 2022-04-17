@@ -22,9 +22,22 @@ namespace XCOM.Schema.Core.Infrastructure
             }
             catch (Exception ex)
             {
-                throw new Exception("PFTIoC初始化异常", ex);
+                throw new Exception("XMIOC初始化异常", ex);
             }
         }
+
+        public static void Build(IContainer container)
+        {
+            try
+            {
+                XMIOC.InitializeWith(container);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("XMIOC初始化异常", ex);
+            }
+        }
+
 
         public static void Run()
         {

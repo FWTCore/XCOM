@@ -1,17 +1,19 @@
 ﻿using Autofac;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XCOM.Schema.Standard.System;
+using IContainer = Autofac.IContainer;
 
 namespace XCOM.Schema.Core.Infrastructure.IOC
 {
-    public class AutofacDependencyResolver : XMDisposableResource, IDependencyResolver
+    public class AutofacContainerResolver : XMDisposableResource, IDependencyResolver
     {
-        private readonly ILifetimeScope _container;
-        public AutofacDependencyResolver(ILifetimeScope container)
+        private readonly IContainer _container;
+        public AutofacContainerResolver(IContainer container)
         {
             if (container == null)
             {
