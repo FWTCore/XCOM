@@ -64,13 +64,37 @@ namespace XCOM.Schema.EDapper.LTS
 
         public string GetConditionSql()
         {
-            if (this._whereCondition.Count != 1)
-            {
-                throw new Exception("没有解析处查询语句");
-            }
             if (this._conditionLink.Count > 0)
             {
                 throw new Exception($"还有表达式类型【{string.Join(',', this._conditionLink.ToArray())}】未解析");
+            }
+            if (this._whereCondition.Count == 0
+                && this._conditionLink.Count == 0
+                && this._equationLink.Count == 0
+                && this._fieldCondition.Count == 0
+                && this._fieldValue.Count == 1)
+            {
+                var obj = this._fieldValue.Pop();
+                if (obj is int)
+                {
+                    var value = (int)obj;
+                    if (value >= 1)
+                    {
+                        this._whereCondition.Push(" 1=1 ");
+                    }
+                    else
+                    {
+                        this._whereCondition.Push(" 1=0 ");
+                    }
+                }
+                else
+                {
+                    this._whereCondition.Push(" 1=0 ");
+                }
+            }
+            if (this._whereCondition.Count != 1)
+            {
+                this._whereCondition.Push(" 1=0 ");
             }
             return this._whereCondition.Pop();
         }
