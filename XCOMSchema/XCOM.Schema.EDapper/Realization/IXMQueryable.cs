@@ -142,7 +142,7 @@ namespace XCOM.Schema.EDapper.Realization
         /// 提交数据库,返回IList集合
         /// </summary>
         /// <returns></returns>
-        PageResponseBase<T> ToPageList(PageRequestBase request);
+        PageVOBase<T> ToPageList(PageQueryBase request);
 
         #endregion
 

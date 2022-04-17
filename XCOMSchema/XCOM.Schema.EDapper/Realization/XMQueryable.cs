@@ -213,9 +213,9 @@ namespace XCOM.Schema.EDapper.Realization
             return await this.ToListAsync();
         }
 
-        public virtual PageResponseBase<T> ToPageList(PageRequestBase request)
+        public virtual PageVOBase<T> ToPageList(PageQueryBase request)
         {
-            var reuslt = new PageResponseBase<T>();
+            var reuslt = new PageVOBase<T>();
             var skipCount = (request.PageIndex - 1) * request.PageSize;
             var takeCount = request.PageSize;
             Skip(skipCount).Take(takeCount);

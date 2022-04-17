@@ -10,7 +10,7 @@ namespace XCOM.Schema.Data.DataAccess
     /// 通用分页返回
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class PageResponseBase<T>
+    public class PageVOBase<T>
     {
         /// <summary>
         /// 总条数
