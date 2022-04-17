@@ -61,19 +61,6 @@ namespace XCOM.Schema.EDapper.Polymorphism
             return format.ToString();
         }
 
-        /*
-        public string MethodAnalysis(string methodName, bool isNegate = false)
-        {
-            return methodName switch
-            {
-                "StartsWith" => "CONCAT({0},'%')",
-                "EndsWith" => "CONCAT('%',{0})",
-                "Contains" => " CONCAT('%',{0},'%')",
-                "Equals" => "{0}",
-                _ => "{0}"
-            };
-        }
-         */
         /// <summary>
         /// TODO TEST
         /// </summary>
@@ -90,12 +77,12 @@ namespace XCOM.Schema.EDapper.Polymorphism
                 ConditionOperation.LessThanEqual => "{0}<={1}",
                 ConditionOperation.MoreThan => "{0}>{1}",
                 ConditionOperation.MoreThanEqual => "{0}>={1}",
-                ConditionOperation.Like => "{0} LIKE CONCAT('%',{1},'%'))",
-                ConditionOperation.LikeLeft => "{0} LIKE CONCAT({1},'%'))",
-                ConditionOperation.LikeRight => "{0} LIKE CONCAT('%',{1}))",
-                ConditionOperation.NotLike => "{0} NOT LIKE CONCAT('%',{1},'%'))",
-                ConditionOperation.NotLikeLeft => "{0} NOT LIKE CONCAT({1},'%'))",
-                ConditionOperation.NotLikeRight => "{0} NOT LIKE CONCAT('%',{1}))",
+                ConditionOperation.Like => "{0} LIKE CONCAT('%',{1},'%')",
+                ConditionOperation.LikeLeft => "{0} LIKE CONCAT({1},'%')",
+                ConditionOperation.LikeRight => "{0} LIKE CONCAT('%',{1})",
+                ConditionOperation.NotLike => "{0} NOT LIKE CONCAT('%',{1},'%')",
+                ConditionOperation.NotLikeLeft => "{0} NOT LIKE CONCAT({1},'%')",
+                ConditionOperation.NotLikeRight => "{0} NOT LIKE CONCAT('%',{1})",
                 ConditionOperation.In => "{0} IN {1}",
                 ConditionOperation.NotIn => "{0} NOT IN {1}",
                 _ => throw new Exception("ConditionOperation 无效")

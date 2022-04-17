@@ -19,50 +19,44 @@ namespace XCOM.Schema.EDapper.Polymorphism
             switch (methodName)//系统级
             {
                 case "StartsWith":
-                    {
-                        format.Append("({0} like {1}+'%')");
-                        break;
-                    }
+                    if (isNegate)
+                        format.Append(" {0} not like {1}+'%' ");
+                    else
+                        format.Append(" {0} like {1}+'%' ");
+                    break;
                 case "EndsWith":
-                    {
-                        format.Append("({0} like '%'+{1})");
-                        break;
-                    }
+                    if (isNegate)
+                        format.Append(" {0} not like '%'+{1} ");
+                    else
+                        format.Append(" {0} like '%'+{1} ");
+                    break;
                 case "Contains":
-                    {
-                        format.Append("({0} like '%'+{1}+'%')");
-                        break;
-                    }
+                    if (isNegate)
+                        format.Append(" {0} not like '%'+{1}+'%' ");
+                    else
+                        format.Append(" {0} like '%'+{1}+'%' ");
+                    break;
                 case "Equals":
-                    {
-                        format.Append("({0} = {1} ");
-                        break;
-                    }
+                    if (isNegate)
+                        format.Append(" {0}<>{1} ");
+                    else
+                        format.Append(" {0}={1} ");
+                    break;
                 case "XMIn":
-                    {
-                        format.Append("({0} in {1})");
-                        break;
-                    }
-                case "XMNotIn":
-                    {
-                        format.Append("({0} not in {1})");
-                        break;
-                    }
-                case "XMNotLike":
-                    {
-                        format.Append("({0} not like '%'+{1}+'%')");
-                        break;
-                    }
-                case "XMNotStartsLike":
-                    {
-                        format.Append("({0} not like {1}+'%')");
-                        break;
-                    }
-                case "XMNotEndsLike":
-                    {
-                        format.Append("({0} not like '%'+{1})");
-                        break;
-                    }
+                    if (isNegate)
+                        format.Append(" {0} not in {1} ");
+                    else
+                        format.Append(" {0} in {1} ");
+                    break;
+                case "IsNullOrEmpty":
+                case "IsNullOrWhiteSpace":
+                    if (isNegate)
+                        format.Append(" {0} is not null ");
+                    else
+                        format.Append(" {0} is null ");
+                    break;
+                default:
+                    return null;
             }
 
             return format.ToString();
@@ -75,7 +69,7 @@ namespace XCOM.Schema.EDapper.Polymorphism
         /// <returns></returns>
         public string ConditionOperationAnalysis(ConditionOperation operation, out string paramFormat)
         {
-            paramFormat = "@{0}";
+            paramFormat = "{0}";
             return operation switch
             {
                 ConditionOperation.Equal => "{0}={1}",
@@ -84,12 +78,12 @@ namespace XCOM.Schema.EDapper.Polymorphism
                 ConditionOperation.LessThanEqual => "{0}<={1}",
                 ConditionOperation.MoreThan => "{0}>{1}",
                 ConditionOperation.MoreThanEqual => "{0}>={1}",
-                ConditionOperation.Like => "{0} LIKE '%{1}%'",
-                ConditionOperation.LikeLeft => "{0} LIKE '{1}%'",
-                ConditionOperation.LikeRight => "{0} LIKE '%{1}'",
-                ConditionOperation.NotLike => "{0} NOT LIKE '%{1}%'",
-                ConditionOperation.NotLikeLeft => "{0} NOT LIKE '{1}%'",
-                ConditionOperation.NotLikeRight => "{0} NOT LIKE '%{1}'",
+                ConditionOperation.Like => "{0} LIKE '%'+{1}+'%'",
+                ConditionOperation.LikeLeft => "{0} LIKE {1}+'%'",
+                ConditionOperation.LikeRight => "{0} LIKE '%'+{1}",
+                ConditionOperation.NotLike => "{0} NOT LIKE '%'+{1}+'%'",
+                ConditionOperation.NotLikeLeft => "{0} NOT LIKE {1}+'%'",
+                ConditionOperation.NotLikeRight => "{0} NOT LIKE '%'+{1}",
                 ConditionOperation.In => "{0} IN {1}",
                 ConditionOperation.NotIn => "{0} NOT IN {1}",
                 _ => throw new Exception("ConditionOperation 无效")

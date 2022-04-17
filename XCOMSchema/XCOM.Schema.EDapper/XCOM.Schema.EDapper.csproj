@@ -18,9 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Model\MsSqlServer\" />
     <Folder Include="Model\SQLite\" />
-    <Folder Include="Realization\MsSqlServer\" />
     <Folder Include="Realization\SQLite\" />
   </ItemGroup>
 
