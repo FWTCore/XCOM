@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace XCOM.Schema.Standard.Cache
 {
-    public static class XMCache
+    public static class XMMemoryCache
     {
         public readonly static IMemoryCache _memoryCache;
 
-        static XMCache()
+        static XMMemoryCache()
         {
             _memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
         }
@@ -40,9 +40,9 @@ namespace XCOM.Schema.Standard.Cache
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public static void SetCache(string key, Object value)
+        public static T SetCache<T>(string key, T value)
         {
-            _memoryCache.GetOrCreate(key, entry =>
+            return _memoryCache.GetOrCreate(key, entry =>
             {
                 return value;
             });
@@ -53,9 +53,9 @@ namespace XCOM.Schema.Standard.Cache
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <param name="absoluteExpiration"></param>
-        public static void SetCacheAbsolute(string key, Object value, int absoluteExpiration)
+        public static T SetCacheAbsolute<T>(string key, T value, int absoluteExpiration)
         {
-            _memoryCache.GetOrCreate(key, entry =>
+            return _memoryCache.GetOrCreate(key, entry =>
             {
                 entry.SetAbsoluteExpiration(TimeSpan.FromSeconds(absoluteExpiration));
                 return value;
@@ -67,9 +67,9 @@ namespace XCOM.Schema.Standard.Cache
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <param name="slidingExpiration"></param>
-        public static void SetCacheSliding(string key, Object value, int slidingExpiration)
+        public static T SetCacheSliding<T>(string key, T value, int slidingExpiration)
         {
-            _memoryCache.GetOrCreate(key, entry =>
+            return _memoryCache.GetOrCreate(key, entry =>
             {
                 entry.SetSlidingExpiration(TimeSpan.FromSeconds(slidingExpiration));
                 return value;
@@ -77,6 +77,7 @@ namespace XCOM.Schema.Standard.Cache
         }
 
         #endregion
+
 
     }
 }
