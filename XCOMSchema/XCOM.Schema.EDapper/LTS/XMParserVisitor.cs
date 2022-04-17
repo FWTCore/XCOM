@@ -89,11 +89,13 @@ namespace XCOM.Schema.EDapper.LTS
                 }
                 else
                 {
+                    XMLog.Error("sql语句解析失败，_fieldValue存在多条或者不满足为int");
                     this._whereCondition.Push(" 1=0 ");
                 }
             }
             if (this._whereCondition.Count != 1)
             {
+                XMLog.Error("sql语句解析失败，_whereCondition存在多条");
                 this._whereCondition.Push(" 1=0 ");
             }
             return this._whereCondition.Pop();
