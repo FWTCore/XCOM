@@ -213,7 +213,7 @@ namespace XCOM.Schema.EDapper.Realization
             return await this.ToListAsync();
         }
 
-        public virtual PageVOBase<T> ToPageList(PageQueryBase request)
+        public virtual PageVOBase<T> ToPageList(PageROBase request)
         {
             var reuslt = new PageVOBase<T>();
             var skipCount = (request.PageIndex - 1) * request.PageSize;

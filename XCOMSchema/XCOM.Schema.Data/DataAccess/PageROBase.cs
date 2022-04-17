@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace XCOM.Schema.Data.DataAccess
 {
-    public class PageQueryBase
+    public class PageROBase
     {
         /// <summary>
         /// 每页条数
