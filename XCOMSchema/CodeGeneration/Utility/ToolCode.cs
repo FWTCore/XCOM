@@ -171,7 +171,7 @@ namespace CodeGeneration.Utility
                 entityContent.AppendLine("\t}");
                 entityContent.AppendLine("}");
 
-                var path = System.IO.Path.Combine(filePath, ToolConstant.PatchRepositoryFile, $"{entityName}Service.cs");
+                var path = System.IO.Path.Combine(filePath, ToolConstant.PatchRepositoryFile, $"{entityName}Repository.cs");
                 XMFile.WriteFile(path, entityContent.ToString());
 
                 entityContent.Clear();

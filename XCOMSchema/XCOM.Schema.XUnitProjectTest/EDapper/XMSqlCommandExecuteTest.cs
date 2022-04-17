@@ -36,7 +36,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
                 }
             };
             Assert.True(XMJson.Serailze(expectedDataList).Equals(XMJson.Serailze(actualDataList)));
-
+           
         }
 
 
