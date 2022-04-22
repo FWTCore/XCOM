@@ -45,7 +45,7 @@ namespace XCOM.Schema.EDapper.Model
         {
             get
             {
-                return $"insert into {GetTableName()} ({string.Join(",", this.InsertColumns)}) value(@{string.Join(",@", this.InsertFields)});SELECT @@IDENTITY";
+                return $"insert into {GetTableName()} ({string.Join(",", this.InsertColumns)}) values(@{string.Join(",@", this.InsertFields)});SELECT @@IDENTITY";
             }
         }
         /// <summary>
@@ -55,7 +55,7 @@ namespace XCOM.Schema.EDapper.Model
         {
             get
             {
-                return $"insert into {GetTableName()} ({string.Join(",", this.InsertColumns)}) value(@{string.Join(",@", this.InsertFields)})";
+                return $"insert into {GetTableName()} ({string.Join(",", this.InsertColumns)}) values(@{string.Join(",@", this.InsertFields)})";
             }
         }
     }
