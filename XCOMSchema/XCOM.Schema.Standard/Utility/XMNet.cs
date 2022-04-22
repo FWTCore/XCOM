@@ -10,7 +10,7 @@ using XCOM.Schema.Data.DataAccess;
 
 namespace XCOM.Schema.Standard.Utility
 {
-    public class PFTNet
+    public class XMNet
     {
         #region Post方式
         /// <summary>
