@@ -224,11 +224,6 @@ namespace XCOM.Schema.EDapper.Realization
             reuslt.PageSize = request.PageSize;
 
             reuslt.TotalCount = Count();
-            reuslt.TotalPages = reuslt.TotalCount / reuslt.PageSize;
-            if (reuslt.TotalCount % reuslt.PageSize > 0)
-            {
-                reuslt.TotalPages++;
-            }
             reuslt.Items = ToList();
 
             return reuslt;

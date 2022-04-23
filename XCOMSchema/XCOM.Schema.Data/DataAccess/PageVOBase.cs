@@ -35,6 +35,21 @@ namespace XCOM.Schema.Data.DataAccess
         /// <summary>
         /// 总页数
         /// </summary>
-        public long TotalPages { get; set; }
+        public long TotalPages
+        {
+            get
+            {
+                if (TotalCount <= 0 || PageSize <= 0)
+                {
+                    return 0;
+                }
+                var totalPage = TotalCount / PageSize;
+                if (TotalCount % PageSize > 0)
+                {
+                    totalPage++;
+                }
+                return totalPage;
+            }
+        }
     }
 }
