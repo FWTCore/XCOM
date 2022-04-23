@@ -98,7 +98,7 @@ namespace CodeGeneration
             }
             var dataList = GetTableEntities();
             this.noselectContent.ItemsSource = dataList.Select(e => e.TableName).ToList();
-            //this.noselectContent.DisplayMemberPath = "TableName";
+            this.selectContent.ItemsSource = null;
         }
 
         private void btnLeftAll_Click(object sender, RoutedEventArgs e)
