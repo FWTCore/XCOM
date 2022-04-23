@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace XCOM.Schema.Data.DataAccess
@@ -53,6 +54,38 @@ namespace XCOM.Schema.Data.DataAccess
                 resultSql.Append(SortBy).Append(' ').Append(dir);//默认处理方式
             }
             return resultSql.ToString();
+        }
+
+        /// <summary>
+        /// 跳过数量
+        /// </summary>
+        [JsonIgnore]
+        public int SkipCount
+        {
+            get
+            {
+                if (PageIndex <= 1 || PageSize <= 0)
+                {
+                    return 0;
+                }
+                return (PageIndex - 1) * PageSize;
+            }
+        }
+        /// <summary>
+        /// 截止数量
+        /// </summary>
+        [JsonIgnore]
+        public int EndCount
+        {
+            get
+            {
+                if (PageSize <= 0)
+                {
+                    return 0;
+                }
+                return SkipCount + PageSize;
+            }
+
         }
 
     }
