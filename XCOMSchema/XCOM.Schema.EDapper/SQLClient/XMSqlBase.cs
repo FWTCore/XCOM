@@ -216,7 +216,10 @@ namespace XCOM.Schema.EDapper.SQLClient
             {
                 format = match.Groups[1].Value.Trim();
             }
-            format = string.Format(format, args);
+            if (args != null || args.Count() > 0)
+            {
+                format = string.Format(format, args);
+            }
             var tempSql = regex.Replace(_commandText.ToString(), format);
             _commandText.Clear().Append(tempSql);
         }
