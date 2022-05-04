@@ -62,6 +62,23 @@ namespace XCOM.Schema.EDapper.Polymorphism
             return format.ToString();
         }
 
+        public string FunctionAnalysis(string methodName, string parameterName)
+        {
+            var resultData = new StringBuilder();
+            switch (methodName)
+            {
+                case "Length":
+                    resultData.Append($"len({parameterName})");
+                    break;
+                default:
+                    resultData.Append(parameterName);
+                    break;
+
+            }
+
+            return resultData.ToString();
+        }
+
         /// <summary>
         /// TODO
         /// </summary>

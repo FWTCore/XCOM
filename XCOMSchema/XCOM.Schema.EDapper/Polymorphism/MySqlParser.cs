@@ -61,6 +61,11 @@ namespace XCOM.Schema.EDapper.Polymorphism
             return format.ToString();
         }
 
+        public string FunctionAnalysis(string methodName, string parameterName)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// TODO TEST
         /// </summary>

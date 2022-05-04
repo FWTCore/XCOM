@@ -123,7 +123,25 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
 
         #endregion
 
+
+        [Theory(DisplayName = "XMORMEntityTest")]
+        [InlineData("MZXSystem")]
+        public void ORMFiled_Length(string dbKey)
+        {
+            var expected = $"select {filed} from AssetsCategory  where len(CategoryCode) =4 ORDER BY id ";
+            var rep = new ExpressTestRepository();
+            var query = rep.Query(dbKey).Where(d =>
+            d.CompanyName.Length == 4);
+            var sql = query.DebugSql();
+            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
+                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+
+
+        }
+
+
         #region 字符串测试
+
 
         [Theory(DisplayName = "XMORMEntityTest")]
         [InlineData("localhost")]

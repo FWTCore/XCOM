@@ -55,5 +55,14 @@ namespace XCOM.Schema.EDapper.Polymorphism
         /// <param name="isSql2008"></param>
         /// <returns></returns>
         string SqlPagination(SqlPartModel sqlPart, int skipCount, int takeCount, bool isSql2008 = true);
+
+        /// <summary>
+        /// 数据库函数解析
+        /// </summary>
+        /// <param name="methodName"></param>
+        /// <param name="parameterName"></param>
+        /// <returns></returns>
+        string FunctionAnalysis(string methodName, string parameterName);
+
     }
 }

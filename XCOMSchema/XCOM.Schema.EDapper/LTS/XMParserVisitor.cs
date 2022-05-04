@@ -317,6 +317,8 @@ namespace XCOM.Schema.EDapper.LTS
             this._fieldValue.Push(value);
             this._fieldCondition.Push("@");
         }
+
+
         /// <summary>
         /// 记录日志
         /// </summary>
@@ -532,7 +534,16 @@ namespace XCOM.Schema.EDapper.LTS
                 }
                 else
                 {
-                    this._fieldCondition.Push(node.Member.Name);
+                    if (node.Member != typeof(string) && this._fieldCondition.Count == 1)
+                    {
+                        var parser = XMRealization.GetPolymorphism(this.DbType);
+                        var field = parser.FunctionAnalysis(node.Member.Name, this._fieldCondition.Pop());
+                        this._fieldCondition.Push(field);
+                    }
+                    else
+                    {
+                        this._fieldCondition.Push(node.Member.Name);
+                    }
                 }
             }
             else
