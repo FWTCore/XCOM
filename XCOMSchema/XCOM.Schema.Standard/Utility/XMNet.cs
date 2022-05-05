@@ -112,28 +112,7 @@ namespace XCOM.Schema.Standard.Utility
         #endregion
 
 
-        #region  Post方式上传文件
 
-        public static string Post(string url, List<UploadFileDTO> files, string requestParam)
-        {
-            var options = new RestClientOptions(url)
-            {
-                Timeout = 1000
-            };
-            var client = new RestClient(options);
-            var request = new RestRequest("upload", Method.Post);
-            files.ForEach(file =>
-            {
-                byte[] buffer = new byte[file.Stream.Length];
-                file.Stream.Read(buffer, 0, (int)file.Stream.Length);
-                file.Stream.Close();
-                request.AddFile(file.Name, () => file.Stream, file.Name, file.ContentType);
-            });
-            request.AddParameter("Request", requestParam);
-            var response = client.PostAsync(request).Result;
-            return response.Content;
-        }
-        #endregion
 
 
         #region Get方式
@@ -209,6 +188,49 @@ namespace XCOM.Schema.Standard.Utility
         }
 
         #endregion
+
+
+        #region  上传、下载文件
+
+        /// <summary>
+        /// 上传文件
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="files"></param>
+        /// <param name="requestParam"></param>
+        /// <returns></returns>
+        public static string UploadFile(string url, List<UploadFileDTO> files, string requestParam)
+        {
+            var options = new RestClientOptions(url)
+            {
+                Timeout = 1000
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest("upload", Method.Post);
+            files.ForEach(file =>
+            {
+                byte[] buffer = new byte[file.Stream.Length];
+                file.Stream.Read(buffer, 0, (int)file.Stream.Length);
+                file.Stream.Close();
+                request.AddFile(file.Name, () => file.Stream, file.Name, file.ContentType);
+            });
+            request.AddParameter("Request", requestParam);
+            var response = client.PostAsync(request).Result;
+            return response.Content;
+        }
+
+
+        public static void DownloadFile(string url)
+        {
+
+        }
+
+
+
+
+
+        #endregion
+
 
     }
 }

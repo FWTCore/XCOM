@@ -216,7 +216,7 @@ namespace XCOM.Schema.EDapper.SQLClient
             {
                 format = match.Groups[1].Value.Trim();
             }
-            if (args != null || args.Count() > 0)
+            if (args != null && args.Length > 0)
             {
                 format = string.Format(format, args);
             }
