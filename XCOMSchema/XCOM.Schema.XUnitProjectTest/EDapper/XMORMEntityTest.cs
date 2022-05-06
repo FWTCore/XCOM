@@ -136,10 +136,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var sql = query.DebugSql();
             Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
                 sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
-
-
         }
-
 
         [Theory(DisplayName = "XMORMEntityTest")]
         [InlineData("MZXSystem")]
@@ -155,6 +152,20 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
                 sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
 
 
+        }
+
+        [Theory(DisplayName = "XMORMEntityTest")]
+        [InlineData("MZXSystem")]
+        public void ORMFiled_Length2(string dbKey)
+        {
+            var code = "1234";
+            var expected = $"select {filed} from express_test  where len(CompanyName) =@CompanyName ORDER BY SysNo ";
+            var rep = new ExpressTestRepository();
+            var query = rep.Query(dbKey).Where(d =>
+            d.CompanyName.Length.Equals(code.Length + 4));
+            var sql = query.DebugSql();
+            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
+                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
         }
 
         #region 字符串测试
