@@ -72,14 +72,6 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
 
         }
 
-        [Theory(DisplayName = "Query")]
-        [InlineData("localhost")]
-        public void Query(string dbKey)
-        {
-            var rep = new ExpressRepository();
-            var data = rep.Query(dbKey).Where(d => d.CommonStatus == CommonStatusType.Valid).Count();
-            Assert.Equal(6, data);
-        }
 
 
 

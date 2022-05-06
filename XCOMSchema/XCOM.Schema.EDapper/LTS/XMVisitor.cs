@@ -312,23 +312,23 @@ namespace XCOM.Schema.EDapper.LTS
         protected override Expression VisitBinary(BinaryExpression node)
         {
             Log($"{Environment.NewLine}访问了 VisitBinary{Environment.NewLine}内容：{node}");
-            if (IsConditon(node.NodeType) || IsEquation(node.NodeType))
+            if (IsConditon(node.NodeType))
+            {
+                this._conditionLink.Push(node.NodeType); 
+                this.Visit(node.Left);
+                var rightContent = this._whereCondition.Pop();
+                this.Visit(node.Right);
+                var leftContent = this._whereCondition.Pop();
+                this._whereCondition.Push(string.Format(leftContent, rightContent, NodeTypeConvert(this._conditionLink.Pop())));
+                return node;
+            }
+            else if (IsEquation(node.NodeType))
             {
                 this._conditionLink.Push(node.NodeType);
                 this.Visit(node.Left);
                 this.Visit(node.Right);
-                string rightContent;
-                string leftContent;
-                if (IsConditon(node.NodeType))
-                {
-                    rightContent = this._whereCondition.Pop();
-                    leftContent = this._whereCondition.Pop();
-                }
-                else
-                {
-                    rightContent = this._fieldCondition.Pop();
-                    leftContent = this._fieldCondition.Pop();
-                }
+                var rightContent = this._fieldCondition.Pop();
+                var leftContent = this._fieldCondition.Pop();
                 var paramName = this.StructureCondition(leftContent, rightContent, NodeTypeConvert(this._conditionLink.Pop()));
                 if (!IsConditon(node.NodeType))
                 {

@@ -299,15 +299,14 @@ namespace XCOM.Schema.EDapper.Realization
         /// <returns></returns>
         private string GetResultSql()
         {
-            var version = this.XMDBSql.ExecuteScalar<string>("SELECT @@VERSION AS Expr1", null);
-            string resultSql;
-            if (version.StartsWith("Microsoft SQL Server 2005") || version.StartsWith("Microsoft SQL Server 2008"))
+            string resultSql = this.Model.SqlFetchSql;
+            if (this._dbConfig.DBProviderType == XMProviderType.MsSqlServer)
             {
-                resultSql = this.Model.SqlFetchSql_2005_2008;
-            }
-            else
-            {
-                resultSql = this.Model.SqlFetchSql;
+                var version = this.XMDBSql.ExecuteScalar<string>("SELECT @@VERSION AS Expr1", null);
+                if (version.StartsWith("Microsoft SQL Server 2005") || version.StartsWith("Microsoft SQL Server 2008"))
+                {
+                    resultSql = this.Model.SqlFetchSql_2005_2008;
+                }
             }
             return resultSql;
         }

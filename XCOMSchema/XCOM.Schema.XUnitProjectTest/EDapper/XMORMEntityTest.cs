@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XCOM.Schema.Standard.Linq;
 using XCOM.Schema.Standard.Utility;
 using XCOM.Schema.XUnitProjectTest.Model;
 using XCOM.Schema.XUnitProjectTest.Repository;
@@ -128,7 +129,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
         [InlineData("MZXSystem")]
         public void ORMFiled_Length(string dbKey)
         {
-            var expected = $"select {filed} from AssetsCategory  where len(CategoryCode) =4 ORDER BY id ";
+            var expected = $"select {filed} from express_test  where len(CompanyName) =@CompanyName ORDER BY SysNo ";
             var rep = new ExpressTestRepository();
             var query = rep.Query(dbKey).Where(d =>
             d.CompanyName.Length == 4);
@@ -139,6 +140,22 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
 
         }
 
+
+        [Theory(DisplayName = "XMORMEntityTest")]
+        [InlineData("MZXSystem")]
+        public void ORMFiled_Length1(string dbKey)
+        {
+            var code = "1234";
+            var expected = $"select {filed} from express_test  where len(CompanyName) =@CompanyName ORDER BY SysNo ";
+            var rep = new ExpressTestRepository();
+            var query = rep.Query(dbKey).Where(d =>
+            d.CompanyName.Length == code.Length + 4);
+            var sql = query.DebugSql();
+            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
+                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+
+
+        }
 
         #region 字符串测试
 
@@ -824,6 +841,16 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
 
 
         #endregion
+
+        [Theory(DisplayName = "XMORMEntityTest")]
+        [InlineData("localhost")]
+        public void ORM_Other(string dbKey)
+        {
+            var rep = new ExpressTestRepository();
+            var expression = XMLinq.True<ExpressTestEntity>();
+            var query = rep.Query(dbKey).Where(expression);
+            var sql = query.DebugSql();
+        }
 
 
 

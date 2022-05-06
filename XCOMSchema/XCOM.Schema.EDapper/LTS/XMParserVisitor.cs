@@ -38,7 +38,7 @@ namespace XCOM.Schema.EDapper.LTS
         /// <summary>
         /// 等式字段
         /// </summary>
-        private readonly Stack<string> _fieldCondition = new();
+        private readonly Stack<FieldObject> _fieldCondition = new();
         /// <summary>
         /// 等式值
         /// </summary>
@@ -68,37 +68,18 @@ namespace XCOM.Schema.EDapper.LTS
             {
                 throw new Exception($"还有表达式类型【{string.Join(',', this._conditionLink.ToArray())}】未解析");
             }
-            if (this._whereCondition.Count == 0
-                && this._conditionLink.Count == 0
-                && this._equationLink.Count == 0
-                && this._fieldCondition.Count == 0
-                && this._fieldValue.Count == 1)
+            if (this._whereCondition.Count == 1)
             {
-                var obj = this._fieldValue.Pop();
-                if (obj is int)
-                {
-                    var value = (int)obj;
-                    if (value >= 1)
-                    {
-                        this._whereCondition.Push(" 1=1 ");
-                    }
-                    else
-                    {
-                        this._whereCondition.Push(" 1=0 ");
-                    }
-                }
-                else
-                {
-                    XMLog.Error("sql语句解析失败，_fieldValue存在多条或者不满足为int");
-                    this._whereCondition.Push(" 1=0 ");
-                }
+                return this._whereCondition.Pop();
             }
-            if (this._whereCondition.Count != 1)
+            else if (this._whereCondition.Count == 0)
             {
-                XMLog.Error("sql语句解析失败，_whereCondition存在多条");
-                this._whereCondition.Push(" 1=0 ");
+                return AnalyzeValueExpression();
             }
-            return this._whereCondition.Pop();
+            else
+            {
+                throw new Exception("解析异常");
+            }
         }
 
         #region 私有方法
@@ -262,9 +243,11 @@ namespace XCOM.Schema.EDapper.LTS
         /// <param name="second"></param>
         /// <param name="format"></param>
         /// <returns></returns>
-        private string StructureCondition(string first, string second, string format)
+        private string StructureCondition(FieldObject first, FieldObject second, string format)
         {
             var paramName = string.Empty;
+            var firstContent = first.FieldName;
+            var secondContent = second.FieldParameters;
             var isParamList = false;
             if (this._isParamCondition.Count > 0)
             {
@@ -273,29 +256,33 @@ namespace XCOM.Schema.EDapper.LTS
             if (isParamList)
             {
                 // 如果是列表，构建sql为in条件，值肯定在后面
-                if (first.Equals("@"))
+                if (first.FieldName.Equals("@"))
                 {
-                    paramName = GetParameter(second);
-                    first = second;
-                    second = paramName;
+                    paramName = GetParameter(second.FieldParameters);
+                    firstContent = second.FieldName;
+                    secondContent = paramName;
                 }
                 else
                 {
-                    paramName = second = GetParameter(first);
+                    paramName = GetParameter(first.FieldParameters);
+                    firstContent = first.FieldName;
+                    secondContent = paramName;
                 }
             }
             else
             {
-                if (first.Equals("@"))
+                if (first.FieldName.Equals("@"))
                 {
-                    paramName = first = GetParameter(second);
+                    paramName = firstContent = GetParameter(second.FieldParameters);
+                    secondContent = second.FieldName;
                 }
-                else if (second.Equals("@"))
+                else if (!string.IsNullOrWhiteSpace(second.FieldName) && second.FieldName.Equals("@"))
                 {
-                    paramName = second = GetParameter(first);
+                    paramName = secondContent = GetParameter(first.FieldParameters);
+                    firstContent = first.FieldName;
                 }
             }
-            this._whereCondition.Push(string.Format(format, first, second));
+            this._whereCondition.Push(string.Format(format, firstContent, secondContent));
             return paramName;
         }
         /// <summary>
@@ -315,7 +302,7 @@ namespace XCOM.Schema.EDapper.LTS
                 this._isParamCondition.Push(true);
             }
             this._fieldValue.Push(value);
-            this._fieldCondition.Push("@");
+            this._fieldCondition.Push(new FieldObject { FieldName = "@", FieldParameters = "@" });
         }
 
 
@@ -327,7 +314,32 @@ namespace XCOM.Schema.EDapper.LTS
         {
             //XMLog.Info(msg);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        private string AnalyzeValueExpression()
+        {
+            if (this._fieldValue.Count == 1)
+            {
+                var value = this._fieldValue.Pop();
+                //取出值占位符
+                this._fieldCondition.Pop();
+                if ((int)value == 0)
+                {
+                    return "1=0";
+                }
+                else
+                {
+                    return "1=1";
+                }
+            }
+            else
+            {
+                throw new Exception("值类型表达式解析异常");
+            }
+        }
         #endregion
 
         [return: NotNullIfNotNull("node")]
@@ -342,28 +354,41 @@ namespace XCOM.Schema.EDapper.LTS
         protected override Expression VisitBinary(BinaryExpression node)
         {
             Log($"{Environment.NewLine}访问了 VisitBinary{Environment.NewLine}内容：{node}");
-            if (IsConditon(node.NodeType) || IsEquation(node.NodeType))
+            if (IsConditon(node.NodeType))
+            {
+                this._conditionLink.Push(node.NodeType);
+                this.Visit(node.Left);
+                string leftContent;
+                if (this._whereCondition.Count == 0)
+                {
+                    leftContent = AnalyzeValueExpression();
+                }
+                else
+                {
+                    leftContent = this._whereCondition.Pop();
+                }
+                this.Visit(node.Right);
+                string rightContent;
+                if (this._whereCondition.Count == 0)
+                {
+                    rightContent = AnalyzeValueExpression();
+                }
+                else
+                {
+                    rightContent = this._whereCondition.Pop();
+                }
+                this._whereCondition.Push(string.Format(NodeTypeConvert(this._conditionLink.Pop()), leftContent, rightContent));
+                return node;
+            }
+            else if (IsEquation(node.NodeType))
             {
                 this._conditionLink.Push(node.NodeType);
                 this.Visit(node.Left);
                 this.Visit(node.Right);
-                string rightContent;
-                string leftContent;
-                if (IsConditon(node.NodeType))
-                {
-                    rightContent = this._whereCondition.Pop();
-                    leftContent = this._whereCondition.Pop();
-                }
-                else
-                {
-                    rightContent = this._fieldCondition.Pop();
-                    leftContent = this._fieldCondition.Pop();
-                }
+                var rightContent = this._fieldCondition.Pop();
+                var leftContent = this._fieldCondition.Pop();
                 var paramName = this.StructureCondition(leftContent, rightContent, NodeTypeConvert(this._conditionLink.Pop()));
-                if (!IsConditon(node.NodeType))
-                {
-                    this.Parameters.Add(paramName, this._fieldValue.Pop());
-                }
+                this.Parameters.Add(paramName, this._fieldValue.Pop());
                 return node;
             }
             else if (IsOperation(node.NodeType))
@@ -515,7 +540,7 @@ namespace XCOM.Schema.EDapper.LTS
                 {
                     if (this._conditionLink.Count > 0 && this._conditionLink.Peek() == ExpressionType.Equal)
                     {
-                        this._fieldCondition.Push(node.Member.Name);
+                        this._fieldCondition.Push(new FieldObject { FieldName = node.Member.Name, FieldParameters = node.Member.Name });
                     }
                     else
                     {
@@ -534,17 +559,18 @@ namespace XCOM.Schema.EDapper.LTS
                 }
                 else
                 {
-                    this._fieldCondition.Push(node.Member.Name);
-                    //if (node.Member != typeof(string) && this._fieldCondition.Count == 1)
-                    //{
-                    //    var parser = XMRealization.GetPolymorphism(this.DbType);
-                    //    var field = parser.FunctionAnalysis(node.Member.Name, this._fieldCondition.Pop());
-                    //    this._fieldCondition.Push(field);
-                    //}
-                    //else
-                    //{
-                    //    this._fieldCondition.Push(node.Member.Name);
-                    //}
+                    //this._fieldCondition.Push(node.Member.Name);
+                    if (node.Type == typeof(Int32) && this._fieldCondition.Count == 1)
+                    {
+                        var fieldObject = this._fieldCondition.Pop();
+                        var parser = XMRealization.GetPolymorphism(this.DbType);
+                        var fieldName = parser.FunctionAnalysis(node.Member.Name, fieldObject.FieldName);
+                        this._fieldCondition.Push(new FieldObject { FieldName = fieldName, FieldParameters = fieldObject.FieldParameters });
+                    }
+                    else
+                    {
+                        this._fieldCondition.Push(new FieldObject { FieldName = node.Member.Name, FieldParameters = node.Member.Name });
+                    }
                 }
             }
             else
@@ -594,8 +620,8 @@ namespace XCOM.Schema.EDapper.LTS
             {
                 base.VisitMethodCall(node);
                 var conditionCount = OperationConvert(node.Method.Name);
-                var rightContent = string.Empty;
-                string leftContent;
+                var rightContent = new FieldObject();
+                var leftContent = new FieldObject();
                 if (conditionCount == 1)
                 {
                     leftContent = this._fieldCondition.Pop();
@@ -702,6 +728,15 @@ namespace XCOM.Schema.EDapper.LTS
             {
                 return base.VisitUnary(node);
             }
+        }
+
+        /// <summary>
+        /// 字段对象
+        /// </summary>
+        private class FieldObject
+        {
+            public string FieldName { get; set; }
+            public string FieldParameters { get; set; }
         }
     }
 }
