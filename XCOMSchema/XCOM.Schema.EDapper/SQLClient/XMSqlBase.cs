@@ -367,7 +367,8 @@ namespace XCOM.Schema.EDapper.SQLClient
         {
             if (value == null || value == DBNull.Value)
             {
-                return DBNull.Value;
+                //return DBNull.Value;
+                return null;
             }
             Type type = value.GetType();
             if (type.IsEnum || (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) && type.GetGenericArguments() != null && type.GetGenericArguments().Length == 1 && type.GetGenericArguments()[0].IsEnum))
