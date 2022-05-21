@@ -12,10 +12,18 @@ namespace XCOM.Schema.Standard.Excel
 {
     public class XMEPPlus
     {
-
+        /// <summary>
+        /// 读取excel
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filePath"></param>
+        /// <param name="hasHeader"></param>
+        /// <param name="headerMapp"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public static T LoadExcel<T>(string filePath, bool hasHeader = true, Dictionary<string, string> headerMapp = null)
         {
-            //ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (var excelPack = new ExcelPackage())
             {
                 //Load excel stream
@@ -59,5 +67,15 @@ namespace XCOM.Schema.Standard.Excel
             }
 
         }
+
+        //public static void SaveExcel(string filePath,string sheetName,)
+        //{
+        //    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+        //    using (ExcelPackage package = new ExcelPackage(new FileInfo(filePath)))
+        //    {
+        //    }
+        //}
     }
+
 }
+
