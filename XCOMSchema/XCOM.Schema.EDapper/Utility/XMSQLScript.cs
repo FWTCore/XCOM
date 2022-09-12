@@ -75,7 +75,6 @@ namespace XCOM.Schema.EDapper.Utility
             }
             return sqlScriptlist;
         }
-
     }
 }
 

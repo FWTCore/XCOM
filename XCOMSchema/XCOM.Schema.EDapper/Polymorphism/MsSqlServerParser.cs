@@ -121,7 +121,7 @@ namespace XCOM.Schema.EDapper.Polymorphism
                 .AppendLine($"END");
             endScript = script.ToString();
             StringBuilder resultData = new(endScript);
-            resultData.AppendFormat("CREATE TABLE {0}(temp_xmabc_id int IDENTITY(1,1) PRIMARY KEY", temporaryTableName);
+            resultData.AppendFormat("CREATE TABLE {0}(temp_xmabc_id int IDENTITY(1,1) PRIMARY KEY,", temporaryTableName);
             return resultData.ToString();
         }
         public string ConvertFieldType(PropertyInfo prop, int length)

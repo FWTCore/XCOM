@@ -404,5 +404,36 @@ DROP TEMPORARY TABLE IF EXISTS #TagTempory;
 
         }
 
+
+        [Theory(DisplayName = "CheckSql_TemporyTag12")]
+        [InlineData("CheckSql_TemporyTag")]
+        public void CheckEntity(string sqlKey)
+        {
+            var cmd = new XMSqlCommand(sqlKey);
+            var entity = new BaseClassC()
+            {
+                a = "a",
+                b = "b",
+                c = "c"
+            };
+            cmd.SetParameter(entity);
+
+
+            var result = 11;
+
+        }
+    }
+
+    public class BaseClassA
+    {
+        public string a { get; set; }
+    }
+    public class BaseClassB : BaseClassA
+    {
+        public string b { get; set; }
+    }
+    public class BaseClassC : BaseClassB
+    {
+        public string c { get; set; }
     }
 }

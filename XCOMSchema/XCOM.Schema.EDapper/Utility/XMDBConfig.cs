@@ -52,5 +52,15 @@ namespace XCOM.Schema.EDapper.Utility
                 throw new Exception($"DB.config文件中，SQLFile \"{path}\" 不存在！");
             }
         }
+        /// <summary>
+        /// 获取指定配置
+        /// </summary>
+        /// <param name="dbKey"></param>
+        /// <returns></returns>
+        public static DBConnection GetDBConnection(string dbKey)
+        {
+            return ConfigSetting.DBConnectionList.FirstOrDefault(e => e.Key.ToUpper() == dbKey.ToUpper());
+        }
+
     }
 }
