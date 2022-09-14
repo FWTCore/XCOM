@@ -9,7 +9,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using XCOM.Schema.EDapper.DataAccess;
-using XCOM.Schema.EDapper.Model.BinaryTree;
 using XCOM.Schema.EDapper.Realization;
 using XCOM.Schema.Standard.Utility;
 
