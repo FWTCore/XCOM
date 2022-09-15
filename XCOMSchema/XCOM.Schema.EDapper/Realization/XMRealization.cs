@@ -40,6 +40,14 @@ namespace XCOM.Schema.EDapper.Realization
             return (XMDeleteModel<T>)Activator.CreateInstance(type, null);
         }
 
+        public static XMUpdateModel<T> GetUpdateEntity<T>(XMProviderType dbType) where T : class, new()
+        {
+            string fullTypeName = $"{assemblyName}.Model.{dbType}.XMUpdateModel`1";
+            Type objType = Assembly.Load(assemblyName).GetType(fullTypeName);
+            Type type = objType.MakeGenericType(typeof(T));
+            return (XMUpdateModel<T>)Activator.CreateInstance(type, null);
+        }
+
         /// <summary>
         /// 获取sql语句多态对象
         /// </summary>

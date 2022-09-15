@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 using System.Text.RegularExpressions;
 using XCOM.Schema.EDapper.DataAccess;
 using XCOM.Schema.EDapper.Realization;
@@ -29,14 +30,16 @@ namespace XCOM.Schema.EDapper.LTS
 
         /// <summary>
         /// 条件连接
+        /// 存放 and 或者 = 或者not 等值
         /// </summary>
         private readonly Stack<ExpressionType> _conditionLink = new();
         /// <summary>
-        /// 等式连接
+        /// 等式连接格式
         /// </summary>
         private readonly Stack<string> _equationLink = new();
         /// <summary>
         /// 等式字段
+        /// @ 表示值，其他表示字段。需要注意字段何值的顺序
         /// </summary>
         private readonly Stack<FieldObject> _fieldCondition = new();
         /// <summary>
@@ -49,6 +52,7 @@ namespace XCOM.Schema.EDapper.LTS
         private readonly Stack<string> _whereCondition = new();
         /// <summary>
         /// 方法结果值
+        /// 存储计算表达式值
         /// </summary>
         private readonly Stack<object> _methodResultValue = new();
         /// <summary>
@@ -57,13 +61,14 @@ namespace XCOM.Schema.EDapper.LTS
         private bool _isParameter = false;
 
         /// <summary>
-        /// 是否参数列表
+        /// 参数是否列表
         /// </summary>
-        private readonly Stack<bool> _isParamCondition = new();
+        private readonly Stack<bool> _isParamListCondition = new();
 
 
         public string GetConditionSql()
         {
+            // 有值说明还有等式条件没解析或被遗忘
             if (this._conditionLink.Count > 0)
             {
                 throw new Exception($"还有表达式类型【{string.Join(',', this._conditionLink.ToArray())}】未解析");
@@ -187,7 +192,7 @@ namespace XCOM.Schema.EDapper.LTS
         {
             var resultData = 2;
             if (methodName.Equals("Contains")
-                && this._isParamCondition.Count > 0 && this._isParamCondition.Peek())
+                && this._isParamListCondition.Count > 0 && this._isParamListCondition.Peek())
             {
                 methodName = "XMIn";
             }
@@ -198,6 +203,7 @@ namespace XCOM.Schema.EDapper.LTS
             switch (methodName)
             {
                 case "Not":
+                    throw new Exception("等式模板错误");
                     this._equationLink.Push("Not");
                     break;
                 default:
@@ -207,6 +213,7 @@ namespace XCOM.Schema.EDapper.LTS
                         this._conditionLink.Pop();
                         isNegate = true;
                     }
+                    // 根据操作类型获取等式模板
                     var parser = XMRealization.GetPolymorphism(this.DbType);
                     var format = parser.MethodAnalysis(methodName, isNegate);
                     if (!string.IsNullOrWhiteSpace(format))
@@ -249,9 +256,9 @@ namespace XCOM.Schema.EDapper.LTS
             var firstContent = first.FieldName;
             var secondContent = second.FieldParameters;
             var isParamList = false;
-            if (this._isParamCondition.Count > 0)
+            if (this._isParamListCondition.Count > 0)
             {
-                isParamList = this._isParamCondition.Pop();
+                isParamList = this._isParamListCondition.Pop();
             }
             if (isParamList)
             {
@@ -299,7 +306,7 @@ namespace XCOM.Schema.EDapper.LTS
             }
             if (value.GetType().Name == typeof(List<>).Name)
             {
-                this._isParamCondition.Push(true);
+                this._isParamListCondition.Push(true);
             }
             this._fieldValue.Push(value);
             this._fieldCondition.Push(new FieldObject { FieldName = "@", FieldParameters = "@" });
@@ -312,10 +319,10 @@ namespace XCOM.Schema.EDapper.LTS
         /// <param name="msg"></param>
         private static void Log(string msg)
         {
-            //XMLog.Info(msg);
+            XMLog.Info(msg);
         }
         /// <summary>
-        /// 
+        /// 处理一个值情况的条件
         /// </summary>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
@@ -354,8 +361,10 @@ namespace XCOM.Schema.EDapper.LTS
         protected override Expression VisitBinary(BinaryExpression node)
         {
             Log($"{Environment.NewLine}访问了 VisitBinary{Environment.NewLine}内容：{node}");
+            // 条件连接
             if (IsConditon(node.NodeType))
             {
+                // and 或者or连接的是where条件
                 this._conditionLink.Push(node.NodeType);
                 this.Visit(node.Left);
                 string leftContent;
@@ -380,6 +389,7 @@ namespace XCOM.Schema.EDapper.LTS
                 this._whereCondition.Push(string.Format(NodeTypeConvert(this._conditionLink.Pop()), leftContent, rightContent));
                 return node;
             }
+            // 等式连接
             else if (IsEquation(node.NodeType))
             {
                 this._conditionLink.Push(node.NodeType);
@@ -391,10 +401,10 @@ namespace XCOM.Schema.EDapper.LTS
                 this.Parameters.Add(paramName, this._fieldValue.Pop());
                 return node;
             }
+            // 计算
             else if (IsOperation(node.NodeType))
             {
-                LambdaExpression lambda = Expression.Lambda(node);
-                var value = lambda.Compile().DynamicInvoke(null);
+                var value = ExpressionCalculate(node);
                 this.SetFinallyValue(value);
                 return node;
             }
@@ -426,12 +436,12 @@ namespace XCOM.Schema.EDapper.LTS
         protected override Expression VisitConstant(ConstantExpression node)
         {
             Log($"{Environment.NewLine}访问了 VisitConstant{Environment.NewLine}内容：{node}");
+            // 枚举计算对应的int值
             if (node.Type.BaseType == typeof(Enum))
             {
                 var enumConstant = Expression.Constant(node.Value, node.Type);
                 var convert = Expression.Convert(enumConstant, typeof(int));
-                LambdaExpression lambda = Expression.Lambda(convert);
-                var enumValue = (int)lambda.Compile().DynamicInvoke(null);
+                var enumValue = (int)ExpressionCalculate(convert);
                 this._methodResultValue.Push(enumValue);
                 return node;
             }
@@ -439,8 +449,7 @@ namespace XCOM.Schema.EDapper.LTS
             {
                 var enumConstant = Expression.Constant(node.Value, node.Type);
                 var convert = Expression.Convert(enumConstant, typeof(int));
-                LambdaExpression lambda = Expression.Lambda(convert);
-                var value = (int)lambda.Compile().DynamicInvoke(null);
+                var value = (int)ExpressionCalculate(convert);
                 this.SetFinallyValue(value);
                 return node;
             }
@@ -533,17 +542,21 @@ namespace XCOM.Schema.EDapper.LTS
         protected override Expression VisitMember(MemberExpression node)
         {
             Log($"{Environment.NewLine}访问了 VisitMember{Environment.NewLine}内容：{node}");
+            // 此处继续遍历，确定是否有字段名称
             base.VisitMember(node);
             if (this._isParameter)
             {
+                //字段类型为bool
                 if (this._equationLink.Count == 0 && node.Type == typeof(Boolean))
                 {
+                    //是等式，只添加字段
                     if (this._conditionLink.Count > 0 && this._conditionLink.Peek() == ExpressionType.Equal)
                     {
                         this._fieldCondition.Push(new FieldObject { FieldName = node.Member.Name, FieldParameters = node.Member.Name });
                     }
                     else
                     {
+                        // 如果不是，直接构造等式条件
                         var paramName = this.GetParameter(node.Member.Name);
                         this._whereCondition.Push($" {node.Member.Name}={paramName} ");
                         if (this._conditionLink.Count > 0 && this._conditionLink.Peek() == ExpressionType.Not)
@@ -559,7 +572,7 @@ namespace XCOM.Schema.EDapper.LTS
                 }
                 else
                 {
-                    //this._fieldCondition.Push(node.Member.Name);
+                    // 对参数有运算，先解析数据库运算
                     if (node.Type == typeof(Int32) && this._fieldCondition.Count == 1)
                     {
                         var fieldObject = this._fieldCondition.Pop();
@@ -575,8 +588,8 @@ namespace XCOM.Schema.EDapper.LTS
             }
             else
             {
-                LambdaExpression lambda = Expression.Lambda(node);
-                var value = lambda.Compile().DynamicInvoke(null);
+                // 不包含参数，为表达式
+                var value = ExpressionCalculate(node);
                 this.SetFinallyValue(value);
             }
             return node;
@@ -586,19 +599,51 @@ namespace XCOM.Schema.EDapper.LTS
         protected override MemberAssignment VisitMemberAssignment(MemberAssignment node)
         {
             Log($"{Environment.NewLine}访问了 VisitMemberAssignment{Environment.NewLine}内容：{node}");
+            // 获取参数名称
+            this._fieldCondition.Push(new FieldObject()
+            {
+                FieldName = node.Member.Name,
+                FieldParameters = node.Member.Name
+            });
             return base.VisitMemberAssignment(node);
         }
 
         protected override MemberBinding VisitMemberBinding(MemberBinding node)
         {
             Log($"{Environment.NewLine}访问了 VisitMemberBinding{Environment.NewLine}内容：{node}");
-            return base.VisitMemberBinding(node);
+            // 确定关联条件
+            this._conditionLink.Push(ExpressionType.Equal);
+            // 遍历节点
+            base.VisitMemberBinding(node);
+            // 构造等式
+            var rightContent = this._fieldCondition.Pop();
+            var leftContent = this._fieldCondition.Pop();
+            var paramName = this.StructureCondition(leftContent, rightContent, NodeTypeConvert(this._conditionLink.Pop()));
+            this.Parameters.Add(paramName, this._fieldValue.Pop());
+
+            return node;
         }
 
         protected override Expression VisitMemberInit(MemberInitExpression node)
         {
             Log($"{Environment.NewLine}访问了 VisitMemberInit{Environment.NewLine}内容：{node}");
-            return base.VisitMemberInit(node);
+            base.VisitMemberInit(node);
+            //合并条件
+            if (this._whereCondition.Count > 0)
+            {
+                var whereCondition = new StringBuilder();
+                var count = this._whereCondition.Count;
+                for (var i = 0; i < count; i++)
+                {
+                    whereCondition.AppendLine(this._whereCondition.Pop());
+                    if (i < count - 1)
+                    {
+                        whereCondition.Append(',');
+                    }
+                }
+                this._whereCondition.Push(whereCondition.ToString());
+            }
+            return node;
         }
 
         protected override MemberListBinding VisitMemberListBinding(MemberListBinding node)
@@ -616,6 +661,7 @@ namespace XCOM.Schema.EDapper.LTS
         protected override Expression VisitMethodCall(MethodCallExpression node)
         {
             Log($"{Environment.NewLine}访问了 VisitMethodCall{Environment.NewLine}内容：{node}");
+            // 指定的方法
             if (IsOperationConvert(node.Method.Name))
             {
                 base.VisitMethodCall(node);
@@ -640,8 +686,7 @@ namespace XCOM.Schema.EDapper.LTS
             }
             else
             {
-                LambdaExpression lambda = Expression.Lambda(node);
-                var value = lambda.Compile().DynamicInvoke(null);
+                var value = ExpressionCalculate(node);
                 this.SetFinallyValue(value);
                 return node;
             }
@@ -664,7 +709,6 @@ namespace XCOM.Schema.EDapper.LTS
         {
             Log($"{Environment.NewLine}访问了 VisitParameter{Environment.NewLine}内容：{node}");
             this._isParameter = true;
-            //return base.VisitParameter(node);
             return node;
         }
 
@@ -703,18 +747,19 @@ namespace XCOM.Schema.EDapper.LTS
             Log($"{Environment.NewLine}访问了 VisitUnary{Environment.NewLine}内容：{node}");
             if (IsConvert(node.NodeType))
             {
+                //遍历节点
                 base.VisitUnary(node);
                 if (!this._isParameter)
                 {
                     var convert = node;
+                    //如果有计算值，取出来进行转换
                     if (this._methodResultValue.Count > 0)
                     {
                         var value = this._methodResultValue.Pop();
                         var constantExpression = Expression.Constant(value, value.GetType());
                         convert = Expression.Convert(constantExpression, node.Type);
                     }
-                    LambdaExpression lambda = Expression.Lambda(convert);
-                    var convertVaue = lambda.Compile().DynamicInvoke(null);
+                    var convertVaue = ExpressionCalculate(convert);
                     this.SetFinallyValue(convertVaue);
                 }
                 return node;
@@ -735,8 +780,25 @@ namespace XCOM.Schema.EDapper.LTS
         /// </summary>
         private class FieldObject
         {
+            /// <summary>
+            /// 字段名称
+            /// </summary>
             public string FieldName { get; set; }
+            /// <summary>
+            /// 字段变量名称
+            /// </summary>
             public string FieldParameters { get; set; }
+        }
+
+        /// <summary>
+        /// Lambda表达式计算
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        private object ExpressionCalculate(Expression expression)
+        {
+            LambdaExpression lambda = Expression.Lambda(expression);
+            return lambda.Compile().DynamicInvoke(null);
         }
     }
 }

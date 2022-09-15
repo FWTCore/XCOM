@@ -41,7 +41,7 @@ namespace XCOM.Schema.EDapper.Realization
 
         #endregion
 
-        #region
+        #region 排序
 
         /// <summary>
         /// 正序
@@ -76,8 +76,6 @@ namespace XCOM.Schema.EDapper.Realization
 
 
         #endregion
-
-
 
         #region Count
 
@@ -115,7 +113,6 @@ namespace XCOM.Schema.EDapper.Realization
 
         #endregion
 
-
         #region ToList ToTopList ToPageList
 
         /// <summary>
@@ -149,7 +146,6 @@ namespace XCOM.Schema.EDapper.Realization
         string DebugSql();
 
         DynamicParameters DebugParam();
-
 
     }
 }

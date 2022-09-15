@@ -31,7 +31,7 @@ namespace XCOM.Schema.Standard.Linq
         /// 重写 字段 属性
         /// </summary>
         /// <param name="node"></param>
-        /// <returns></returns>00.
+        /// <returns></returns>
         protected sealed override Expression VisitMember(MemberExpression node)
         {
             if (node != null && node.Member.Name != "Value")

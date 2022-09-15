@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using XCOM.Schema.EDapper.DataAccess;
+using XCOM.Schema.EDapper.LTS;
 using XCOM.Schema.Standard.Excel;
 using Xunit;
 
@@ -24,6 +27,39 @@ namespace XCOM.Schema.XUnitProjectTest.Utility
             var data = XMEPPlus.LoadExcel<List<ModelList>>(patch, hasHeader: true,headerMapp: dict) ;
 
         }
+
+        [Theory(DisplayName = "QuerySql")]
+        [InlineData("QuerySql")]
+        public void tt(string sqlKey)
+        {
+            VisitCondition<ModelList>(e => new ModelList
+            {
+                NO = "1"
+                ,
+                CategoryCode = ValueUtility.GetString()
+                ,
+                InDate = ValueUtility.GetDateTime()
+                ,
+                Id = ValueUtility.GetInt()
+                ,
+                GId = ValueUtility.GetGuidConvert()
+            });
+
+            var dd = new List<int> { 1, 2, 3 };
+            dd.Select(e => e);
+        }
+
+
+        private void VisitCondition<T>(Expression<Func<T, T>> expression)
+        {
+            if (expression != null)
+            {
+                Expression exp = expression.Body as Expression;
+                var obj = new XMLambda(new DBConnection());
+                var resultSql = obj.VisitXMLambda(exp);
+            }
+        }
+
     }
 
 
@@ -33,6 +69,9 @@ namespace XCOM.Schema.XUnitProjectTest.Utility
         public string CategoryCode { get; set; }
         public string CategoryName { get; set; }
         public string Name { get; set; }
+        public DateTime? InDate { get; set; }
+        public int Id { get; set; }
+        public Guid GId { get; set; }
     }
 
 

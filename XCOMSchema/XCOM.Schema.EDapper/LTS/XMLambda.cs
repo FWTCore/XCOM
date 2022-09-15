@@ -11,7 +11,7 @@ using XCOM.Schema.EDapper.Utility;
 
 namespace XCOM.Schema.EDapper.LTS
 {
-    internal class XMLambda
+    public class XMLambda
     {
         public DynamicParameters Parameters { get; set; }
         /// <summary>
