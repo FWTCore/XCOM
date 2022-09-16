@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XCOM.Schema.EDapper.DataAccess;
 using XCOM.Schema.EDapper.DBClient;
+using XCOM.Schema.EDapper.LTS;
 using XCOM.Schema.EDapper.Model;
 
 namespace XCOM.Schema.EDapper.Realization
@@ -33,32 +34,75 @@ namespace XCOM.Schema.EDapper.Realization
 
         public DynamicParameters DebugParam()
         {
-            throw new NotImplementedException();
+            return this.Model.Parameters;
         }
 
         public string DebugSql()
         {
-            throw new NotImplementedException();
+            return this.Model.UpdateSql;
         }
 
         public IXMUpdateable<T> Set(Expression<Func<T, T>> expression)
         {
-            throw new NotImplementedException();
+            this.VisitSet(expression);
+            return this;
         }
 
-        public int Update()
+        public int Execute()
         {
-            throw new NotImplementedException();
+            return this.XMDBSql.Execute(this.Model.UpdateSql, this.Model.Parameters);
         }
 
-        public Task<int> UpdateAsync()
+        public async Task<int> ExecuteAsync()
         {
-            throw new NotImplementedException();
+            return await this.XMDBSql.ExecuteAsync(this.Model.UpdateSql, this.Model.Parameters);
         }
 
         public IXMUpdate<T> Where(Expression<Func<T, bool>> expression)
         {
-            throw new NotImplementedException();
+            this.VisitCondition(expression);
+            return this;
         }
+
+        /// <summary>
+        /// 处理lambda查询条件
+        /// </summary>
+        /// <param name="expression"></param>
+        private void VisitCondition(Expression<Func<T, bool>> expression)
+        {
+            if (expression != null)
+            {
+                Expression exp = expression.Body as Expression;
+                var obj = new XMLambda(this._dbConfig);
+                var resultSql = obj.VisitXMLambda(exp);
+                this.Model.Parameters.AddDynamicParams(obj.Parameters);
+                if (this.Model.Where.Length > 0)
+                {
+                    this.Model.Where.Append(" and ");
+                }
+                this.Model.Where.Append(resultSql);
+            }
+        }
+
+        /// <summary>
+        /// 解析更新字段
+        /// </summary>
+        /// <param name="expression"></param>
+        private void VisitSet(Expression<Func<T, T>> expression)
+        {
+            if (expression != null)
+            {
+                Expression exp = expression.Body as Expression;
+                var obj = new XMLambda(this._dbConfig);
+                var resultSql = obj.VisitXMLambda(exp);
+                this.Model.Parameters.AddDynamicParams(obj.Parameters);
+                if (this.Model.Set.Length > 0)
+                {
+                    this.Model.Set.Append(" , ");
+                }
+                this.Model.Set.Append(resultSql);
+            }
+        }
+
     }
 }

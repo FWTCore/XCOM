@@ -39,14 +39,14 @@ namespace XCOM.Schema.EDapper.Realization
         /// 更新方法
         /// </summary>
         /// <returns></returns>
-        int Update();
+        int Execute();
 
         /// <summary>
         /// 更新方法
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        Task<int> UpdateAsync();
+        Task<int> ExecuteAsync();
 
 
         string DebugSql();

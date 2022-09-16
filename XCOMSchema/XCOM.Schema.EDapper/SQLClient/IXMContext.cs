@@ -64,6 +64,11 @@ namespace XCOM.Schema.EDapper.SQLClient
         /// <returns></returns>
         Task<int> DeleteAsync(string connectionKey, Expression<Func<T, bool>> expression);
 
+        /// <summary>
+        /// 查询数据
+        /// </summary>
+        /// <returns></returns>
+        IXMUpdateable<T> Update(string connectionKey);
 
     }
 }

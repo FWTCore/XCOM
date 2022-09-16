@@ -36,17 +36,15 @@ namespace XCOM.Schema.XUnitProjectTest.Utility
             {
                 NO = "1"
                 ,
+                Id = ValueUtility.GetInt()
+                ,
                 CategoryCode = ValueUtility.GetString()
                 ,
                 InDate = ValueUtility.GetDateTime()
                 ,
-                Id = ValueUtility.GetInt()
-                ,
                 GId = ValueUtility.GetGuidConvert()
             });
 
-            var dd = new List<int> { 1, 2, 3 };
-            dd.Select(e => e);
         }
 
 

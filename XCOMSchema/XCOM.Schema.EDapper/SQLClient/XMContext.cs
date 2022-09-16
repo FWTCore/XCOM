@@ -82,6 +82,14 @@ namespace XCOM.Schema.EDapper.SQLClient
             return result;
         }
 
+        public IXMUpdateable<T> Update(string connectionKey)
+        {
+            StructureDBConnection(connectionKey);
+            var result = (IXMUpdateable<T>)GetReflectionObj("IXMUpdateable");
+            return result;
+        }
+
+
         #region 获取反射实例化对象
         /// <summary>
         /// 构造数据库连接
@@ -99,7 +107,6 @@ namespace XCOM.Schema.EDapper.SQLClient
                 throw new Exception($"connectionKey:{connectionKey} 数据库配置无效!");
             }
         }
-
 
         /// <summary>
         /// 根据类名称 获取反射实例化对象
