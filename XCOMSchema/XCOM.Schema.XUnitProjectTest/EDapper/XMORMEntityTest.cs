@@ -539,6 +539,34 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
 
         }
 
+        [Theory(DisplayName = "XMORMEntityTest")]
+        [InlineData("localhost")]
+        public void ORMFiled_Contains_Param_not_null_null(string dbKey)
+        {
+            var expected = $"select {filed} from express_test  where CompanyName is not null  ORDER BY SysNo ";
+            var rep = new ExpressTestRepository();
+            var query = rep.Query(dbKey).Where(d =>
+            d.InUserSysNo == null && !string.IsNullOrWhiteSpace(d.CompanyName)
+            ); 
+            var sql = query.DebugSql();
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
+
+        }
+
+        [Theory(DisplayName = "XMORMEntityTest")]
+        [InlineData("localhost")]
+        public void ORMFiled_Contains_Param_not_null_null1(string dbKey)
+        {
+            var expected = $"select {filed} from express_test  where CompanyName is not null  ORDER BY SysNo ";
+            var rep = new ExpressTestRepository();
+            var query = rep.Query(dbKey).Where(d =>
+            d.InUserSysNo == null && !string.IsNullOrWhiteSpace(d.CompanyName) && !string.IsNullOrWhiteSpace(null)
+            );
+            var sql = query.DebugSql();
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
+
+        }
+
 
         [Theory(DisplayName = "XMORMEntityTest")]
         [InlineData("localhost")]

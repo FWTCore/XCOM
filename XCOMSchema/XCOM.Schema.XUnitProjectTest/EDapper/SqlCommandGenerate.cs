@@ -332,14 +332,14 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
                         ,new ConditionObject{ FieldName="CommonStatus",ConditionOperation=ConditionOperation.LessThan,Value=3}
                         ,new ConditionObject{ FieldName="CommonStatus",ConditionOperation=ConditionOperation.LikeLeft,Value=4}
                     }
-                    ,@"SELECT SysNo FROM express WHERE SysNo = @SysNo AND CommonStatus=@CommonStatus AND CommonStatus<>@CommonStatus1 AND CommonStatus<@CommonStatus2 AND CommonStatus LIKE @CommonStatus3+'%'"
-                    ,@"SELECT SysNo FROM express WHERE SysNo = @SysNo AND CommonStatus=@CommonStatus AND CommonStatus<>@CommonStatus1 AND CommonStatus<@CommonStatus2 AND CommonStatus LIKE CONCAT(@CommonStatus3,'%')"
+                    ,@"SELECT SysNo FROM express WHERE SysNo = @SysNo AND CommonStatus=@CommonStatus AND CommonStatus<>@CommonStatus0 AND CommonStatus<@CommonStatus1 AND CommonStatus LIKE @CommonStatus2+'%'"
+                    ,@"SELECT SysNo FROM express WHERE SysNo = @SysNo AND CommonStatus=@CommonStatus AND CommonStatus<>@CommonStatus0 AND CommonStatus<@CommonStatus1 AND CommonStatus LIKE CONCAT(@CommonStatus2,'%')"
                     , new Dictionary<string, object>()
                     {
                         { "CommonStatus", 1}
-                        ,{ "CommonStatus1", 2}
-                        ,{ "CommonStatus2", 3}
-                        ,{ "CommonStatus3", 4}
+                        ,{ "CommonStatus0", 2}
+                        ,{ "CommonStatus1", 3}
+                        ,{ "CommonStatus2", 4}
                     }
                 },
                 new object [] {
@@ -351,14 +351,14 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
                         ,new ConditionObject{ FieldName="CommonStatus",ConditionOperation=ConditionOperation.LessThan,Value=3}
                         ,new ConditionObject{ FieldName="CommonStatus",ConditionOperation=ConditionOperation.LikeLeft,Value=4}
                     }
-                    ,@"SELECT SysNo FROM express WHERE SysNo = @SysNo AND CommonStatus=@CommonStatus AND CommonStatus<>@CommonStatus1 AND CommonStatus<@CommonStatus2 AND CommonStatus LIKE @CommonStatus3+'%'"
-                    ,@"SELECT SysNo FROM express WHERE SysNo = @SysNo AND CommonStatus=@CommonStatus AND CommonStatus<>@CommonStatus1 AND CommonStatus<@CommonStatus2 AND CommonStatus LIKE CONCAT(@CommonStatus3,'%')"
+                    ,@"SELECT SysNo FROM express WHERE SysNo = @SysNo AND CommonStatus=@CommonStatus AND CommonStatus<>@CommonStatus0 AND CommonStatus<@CommonStatus1 AND CommonStatus LIKE @CommonStatus2+'%'"
+                    ,@"SELECT SysNo FROM express WHERE SysNo = @SysNo AND CommonStatus=@CommonStatus AND CommonStatus<>@CommonStatus0 AND CommonStatus<@CommonStatus1 AND CommonStatus LIKE CONCAT(@CommonStatus2,'%')"
                     , new Dictionary<string, object>()
                     {
                         { "CommonStatus", 1}
-                        ,{ "CommonStatus1", 2}
-                        ,{ "CommonStatus2", 3}
-                        ,{ "CommonStatus3", 4}
+                        ,{ "CommonStatus0", 2}
+                        ,{ "CommonStatus1", 3}
+                        ,{ "CommonStatus2", 4}
                     }
                 },
             };

@@ -13,7 +13,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
 {
     public class XMORMExtensionTest
     {
-        private readonly string filed = "SysNo AS SysNo,CompanyName AS CompanyName,CommonStatus AS CommonStatus,InUserSysNo AS InUserSysNo,IsDelete AS IsDelete,InDate AS InDate,Amount AS Amount,EditDate AS EditDate,gid AS Gid";
+        private readonly string filed = "SysNo AS SysNo,CompanyName AS CompanyName,CommonStatus AS CommonStatus,InUserSysNo AS InUserSysNo,IsDelete AS IsDelete,InDate AS InDate,Amount AS Amount,EditDate AS EditDate,gid AS gid_id";
 
 
         [Theory(DisplayName = "XMORMEntityTest")]

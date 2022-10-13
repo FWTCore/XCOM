@@ -74,6 +74,12 @@ namespace XCOM.Schema.EDapper.LTS
         /// </summary>
         private readonly Stack<bool> _isParamListCondition = new();
 
+        /// <summary>
+        /// 忽略了表达式
+        /// </summary>
+        private readonly Stack<bool> _ignoreCondition = new();
+
+
 
         public string GetConditionSql()
         {
@@ -313,9 +319,12 @@ namespace XCOM.Schema.EDapper.LTS
                 this._fieldValue.Pop();
                 this._fieldCondition.Pop();
             }
-            if (value.GetType().Name == typeof(List<>).Name)
+            if (value != null && value != DBNull.Value)
             {
-                this._isParamListCondition.Push(true);
+                if (value.GetType().Name == typeof(List<>).Name)
+                {
+                    this._isParamListCondition.Push(true);
+                }
             }
             this._fieldValue.Push(value);
             this._fieldCondition.Push(new FieldObject { FieldName = "@", FieldParameters = "@" });
@@ -328,7 +337,7 @@ namespace XCOM.Schema.EDapper.LTS
         /// <param name="msg"></param>
         private static void Log(string msg)
         {
-            XMLog.Info(msg);
+            //XMLog.Info(msg);
         }
         /// <summary>
         /// 处理一个值情况的条件
@@ -375,27 +384,55 @@ namespace XCOM.Schema.EDapper.LTS
             {
                 // and 或者or连接的是where条件
                 this._conditionLink.Push(node.NodeType);
+                var isCancle = false;
                 this.Visit(node.Left);
-                string leftContent;
+                string leftContent = string.Empty;
                 if (this._whereCondition.Count == 0)
                 {
-                    leftContent = AnalyzeValueExpression();
+                    if (this._ignoreCondition.Count == 0)
+                    {
+                        leftContent = AnalyzeValueExpression();
+                    }
+                    else
+                    {
+                        this._ignoreCondition.Pop();
+                        isCancle = true;
+                    }
                 }
                 else
                 {
                     leftContent = this._whereCondition.Pop();
                 }
                 this.Visit(node.Right);
-                string rightContent;
+                string rightContent = string.Empty;
                 if (this._whereCondition.Count == 0)
                 {
-                    rightContent = AnalyzeValueExpression();
+                    if (this._ignoreCondition.Count == 0)
+                    {
+                        rightContent = AnalyzeValueExpression();
+                    }
+                    else
+                    {
+                        this._ignoreCondition.Pop();
+                        isCancle = true;
+                    }
                 }
                 else
                 {
                     rightContent = this._whereCondition.Pop();
                 }
-                this._whereCondition.Push(string.Format(NodeTypeConvert(this._conditionLink.Pop()), leftContent, rightContent));
+                if (!isCancle)
+                {
+                    this._whereCondition.Push(string.Format(NodeTypeConvert(this._conditionLink.Pop()), leftContent, rightContent));
+                }
+                else
+                {
+                    this._conditionLink.Pop();
+                    if (!string.IsNullOrWhiteSpace(leftContent))
+                        this._whereCondition.Push(leftContent);
+                    if (!string.IsNullOrWhiteSpace(rightContent))
+                        this._whereCondition.Push(rightContent);
+                }
                 return node;
             }
             // 等式连接
@@ -406,8 +443,17 @@ namespace XCOM.Schema.EDapper.LTS
                 this.Visit(node.Right);
                 var rightContent = this._fieldCondition.Pop();
                 var leftContent = this._fieldCondition.Pop();
-                var paramName = this.StructureCondition(leftContent, rightContent, NodeTypeConvert(this._conditionLink.Pop()));
-                this.Parameters.Add(paramName, this._fieldValue.Pop());
+                var value = this._fieldValue.Pop();
+                if (value != null && value != DBNull.Value)
+                {
+                    var paramName = this.StructureCondition(leftContent, rightContent, NodeTypeConvert(this._conditionLink.Pop()));
+                    this.Parameters.Add(paramName, value);
+                }
+                else
+                {
+                    this._ignoreCondition.Push(true);
+                    this._conditionLink.Pop();
+                }
                 return node;
             }
             // 计算
@@ -629,9 +675,16 @@ namespace XCOM.Schema.EDapper.LTS
             // 构造等式
             var rightContent = this._fieldCondition.Pop();
             var leftContent = this._fieldCondition.Pop();
-            var paramName = this.StructureCondition(leftContent, rightContent, NodeTypeConvert(this._conditionLink.Pop()));
-            this.Parameters.Add(paramName, this._fieldValue.Pop());
-
+            var value = this._fieldValue.Pop();
+            if (value != null && value != DBNull.Value)
+            {
+                var paramName = this.StructureCondition(leftContent, rightContent, NodeTypeConvert(this._conditionLink.Pop()));
+                this.Parameters.Add(paramName, value);
+            }
+            else
+            {
+                this._ignoreCondition.Push(true);
+            }
             return node;
         }
 
@@ -688,10 +741,26 @@ namespace XCOM.Schema.EDapper.LTS
                     rightContent = this._fieldCondition.Pop();
                     leftContent = this._fieldCondition.Pop();
                 }
-                var paramName = this.StructureCondition(leftContent, rightContent, this._equationLink.Pop());
-                if (!string.IsNullOrWhiteSpace(paramName))
+                if (this._fieldValue.Count > 0)
                 {
-                    this.Parameters.Add(paramName, this._fieldValue.Pop());
+                    var value = this._fieldValue.Pop();
+                    if (value != null && value != DBNull.Value)
+                    {
+                        var paramName = this.StructureCondition(leftContent, rightContent, this._equationLink.Pop());
+                        if (!string.IsNullOrWhiteSpace(paramName))
+                        {
+                            this.Parameters.Add(paramName, value);
+                        }
+                    }
+                    else
+                    {
+                        this._ignoreCondition.Push(true);
+                        this._equationLink.Pop();
+                    }
+                }
+                else
+                {
+                    this.StructureCondition(leftContent, rightContent, this._equationLink.Pop());
                 }
                 return node;
             }
