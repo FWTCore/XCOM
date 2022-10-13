@@ -56,7 +56,7 @@ namespace XCOM.Schema.EDapper.SQLClient
             }
             _commandText.Clear().Append(sqlNode.Text);
 
-            _dbConfig = XMDBConfig.ConfigSetting.DBConnectionList.FirstOrDefault(f => f.Key.Trim().ToUpper() == dbKey);
+            _dbConfig = XMDBConfig.ConfigSetting.DBConnectionList.FirstOrDefault(f => f.Key.Trim().ToUpper() == dbKey.Trim().ToUpper());
             if (_dbConfig == null)
             {
                 throw new Exception($"SQLKey:{dbKey} 数据库配置无效!");

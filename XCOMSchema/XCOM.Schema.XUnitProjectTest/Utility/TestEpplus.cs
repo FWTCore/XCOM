@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XCOM.Schema.EDapper.DataAccess;
 using XCOM.Schema.EDapper.LTS;
+using XCOM.Schema.Standard.DataAnnotations;
 using XCOM.Schema.Standard.Excel;
 using Xunit;
 
@@ -43,6 +44,8 @@ namespace XCOM.Schema.XUnitProjectTest.Utility
                 InDate = ValueUtility.GetDateTime()
                 ,
                 GId = ValueUtility.GetGuidConvert()
+                ,
+                CategoryName = null
             });
 
         }
@@ -63,6 +66,7 @@ namespace XCOM.Schema.XUnitProjectTest.Utility
 
     public class ModelList
     {
+        [XMColumn("Specifications")]
         public string NO { get; set; }
         public string CategoryCode { get; set; }
         public string CategoryName { get; set; }

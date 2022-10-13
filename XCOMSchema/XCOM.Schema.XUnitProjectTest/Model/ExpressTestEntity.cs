@@ -20,7 +20,7 @@ namespace XCOM.Schema.XUnitProjectTest.Model
         public CommonStatusType? CommonStatus { get; set; }
         [XMColumn("InUserSysNo")]
         public int? InUserSysNo { get; set; }
-        [XMColumn("InUserName")]
+        [XMColumn("IsDelete")]
         public bool IsDelete { get; set; }
         [XMColumn("InDate")]
         public DateTime? InDate { get; set; }
@@ -28,7 +28,7 @@ namespace XCOM.Schema.XUnitProjectTest.Model
         public decimal Amount { get; set; }
         [XMColumn("EditDate")]
         public long? EditDate { get; set; }
-        [XMColumn("gid")]
+        [XMColumn("Gid")]
         public Guid? Gid { get; set; }
     }
 }

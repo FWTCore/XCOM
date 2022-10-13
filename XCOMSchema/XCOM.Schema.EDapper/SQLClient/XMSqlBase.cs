@@ -24,7 +24,7 @@ namespace XCOM.Schema.EDapper.SQLClient
         internal DBConnection _dbConfig;
 
         /// <summary>
-        /// 默认Tag
+        /// 占位符
         /// </summary>
         protected readonly string _defaultConditionTag = "#STRWHERE#";
 
@@ -92,16 +92,18 @@ namespace XCOM.Schema.EDapper.SQLClient
         /// <param name="value"></param>
         public string SetParameter(string paramName, object value)
         {
+            var validParamName = paramName;
             if (paramName.StartsWith("@"))
             {
-                paramName = paramName.Remove(0, 1);
+                validParamName = paramName.TrimStart('@');
             }
-            if (this.Parameters.ParameterNames.Any(e => e.Equals(paramName)))
+            var pattern = $"^{validParamName}[0-9]*$";
+            if (this.Parameters.ParameterNames.Any(e => Regex.IsMatch(e, pattern)))
             {
-                paramName = $"{paramName}{this.Parameters.ParameterNames.Count()}";
+                validParamName = $"{validParamName}{this.Parameters.ParameterNames.Where(e => Regex.IsMatch(e, pattern)).Count() - 1}";
             }
-            this.Parameters.Add(paramName, ConvertDbValue(value));
-            return $"@{paramName}";
+            this.Parameters.Add(validParamName, ConvertDbValue(value));
+            return $"@{validParamName}";
         }
         public void SetParameter<T>(T entity) where T : class
         {
@@ -223,6 +225,20 @@ namespace XCOM.Schema.EDapper.SQLClient
             var tempSql = regex.Replace(_commandText.ToString(), format);
             _commandText.Clear().Append(tempSql);
         }
+        /// <summary>
+        /// 替换占位符
+        /// </summary>
+        /// <param name="placeholders"></param>
+        /// <param name="replacement"></param>
+        public void ReplacePlaceholders(string placeholders, string replacement)
+        {
+            if (string.IsNullOrWhiteSpace(placeholders))
+                return;
+            var resultSql = this._commandText.ToString();
+            this._commandText.Clear();
+            this._commandText.Append(resultSql.Replace(placeholders, replacement));
+        }
+
 #pragma warning disable CA1822 // 将成员标记为 static
         public string GetOrTag()
 #pragma warning restore CA1822 // 将成员标记为 static

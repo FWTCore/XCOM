@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using XCOM.Schema.EDapper.DataAccess;
 using XCOM.Schema.EDapper.Realization;
+using XCOM.Schema.Standard.DataAnnotations;
 using XCOM.Schema.Standard.Utility;
 
 namespace XCOM.Schema.EDapper.LTS
@@ -234,7 +236,7 @@ namespace XCOM.Schema.EDapper.LTS
             var validParamName = paramName;
             if (paramName.StartsWith("@"))
             {
-                _ = validParamName.TrimStart('@');
+                validParamName = paramName.TrimStart('@');
             }
             var pattern = $"^{validParamName}[0-9]*$";
             if (this.Parameters.ParameterNames.Any(e => Regex.IsMatch(e, pattern)))
@@ -546,19 +548,20 @@ namespace XCOM.Schema.EDapper.LTS
             base.VisitMember(node);
             if (this._isParameter)
             {
+                var memberName = GetColumnName(node.Member);
                 //字段类型为bool
                 if (this._equationLink.Count == 0 && node.Type == typeof(Boolean))
                 {
                     //是等式，只添加字段
                     if (this._conditionLink.Count > 0 && this._conditionLink.Peek() == ExpressionType.Equal)
                     {
-                        this._fieldCondition.Push(new FieldObject { FieldName = node.Member.Name, FieldParameters = node.Member.Name });
+                        this._fieldCondition.Push(new FieldObject { FieldName = memberName, FieldParameters = memberName });
                     }
                     else
                     {
                         // 如果不是，直接构造等式条件
-                        var paramName = this.GetParameter(node.Member.Name);
-                        this._whereCondition.Push($" {node.Member.Name}={paramName} ");
+                        var paramName = this.GetParameter(memberName);
+                        this._whereCondition.Push($" {memberName}={paramName} ");
                         if (this._conditionLink.Count > 0 && this._conditionLink.Peek() == ExpressionType.Not)
                         {
                             this._conditionLink.Pop();
@@ -577,12 +580,13 @@ namespace XCOM.Schema.EDapper.LTS
                     {
                         var fieldObject = this._fieldCondition.Pop();
                         var parser = XMRealization.GetPolymorphism(this.DbType);
+                        //node.Member.Name 是方名称
                         var fieldName = parser.FunctionAnalysis(node.Member.Name, fieldObject.FieldName);
                         this._fieldCondition.Push(new FieldObject { FieldName = fieldName, FieldParameters = fieldObject.FieldParameters });
                     }
                     else
                     {
-                        this._fieldCondition.Push(new FieldObject { FieldName = node.Member.Name, FieldParameters = node.Member.Name });
+                        this._fieldCondition.Push(new FieldObject { FieldName = memberName, FieldParameters = memberName });
                     }
                 }
             }
@@ -599,11 +603,12 @@ namespace XCOM.Schema.EDapper.LTS
         protected override MemberAssignment VisitMemberAssignment(MemberAssignment node)
         {
             Log($"{Environment.NewLine}访问了 VisitMemberAssignment{Environment.NewLine}内容：{node}");
+            var memberName = GetColumnName(node.Member);
             // 获取参数名称
             this._fieldCondition.Push(new FieldObject()
             {
-                FieldName = node.Member.Name,
-                FieldParameters = node.Member.Name
+                FieldName = memberName,
+                FieldParameters = memberName
             });
             return base.VisitMemberAssignment(node);
         }
@@ -800,5 +805,18 @@ namespace XCOM.Schema.EDapper.LTS
             LambdaExpression lambda = Expression.Lambda(expression);
             return lambda.Compile().DynamicInvoke(null);
         }
+
+        /// <summary>
+        /// 获取字段备注名
+        /// </summary>
+        /// <param name="member"></param>
+        /// <returns></returns>
+        private string GetColumnName(MemberInfo member)
+        {
+            var columnAttribute = member.GetCustomAttribute<XMColumnAttribute>();
+            return columnAttribute == null ? member.Name : columnAttribute.Name;
+        }
+
+
     }
 }

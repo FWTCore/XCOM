@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using XCOM.Schema.Standard.Linq;
 using XCOM.Schema.XUnitProjectTest.Model;
 using XCOM.Schema.XUnitProjectTest.Repository;
+using XCOM.Schema.XUnitProjectTest.Utility;
 using Xunit;
 
 namespace XCOM.Schema.XUnitProjectTest.EDapper
 {
     public class XMORMExtensionTest
     {
-        private readonly string filed = "SysNo AS SysNo,CompanyName AS CompanyName,CommonStatus AS CommonStatus,InUserSysNo AS InUserSysNo,InUserName AS IsDelete,InDate AS InDate,Amount AS Amount,EditDate AS EditDate,gid AS Gid";
+        private readonly string filed = "SysNo AS SysNo,CompanyName AS CompanyName,CommonStatus AS CommonStatus,InUserSysNo AS InUserSysNo,IsDelete AS IsDelete,InDate AS InDate,Amount AS Amount,EditDate AS EditDate,gid AS Gid";
 
 
         [Theory(DisplayName = "XMORMEntityTest")]
@@ -24,8 +25,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var rep = new ExpressTestRepository();
             var query = rep.Query(dbKey).Where(exception);
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-             sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
         }
 
         [Theory(DisplayName = "XMORMEntityTest")]
@@ -38,8 +38,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var rep = new ExpressTestRepository();
             var query = rep.Query(dbKey).Where(exception);
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-             sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
         }
         [Theory(DisplayName = "XMORMEntityTest")]
         [InlineData("localhost")]
@@ -52,8 +51,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var rep = new ExpressTestRepository();
             var query = rep.Query(dbKey).Where(exception);
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-             sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
         }
 
         [Theory(DisplayName = "XMORMEntityTest")]
@@ -68,8 +66,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var rep = new ExpressTestRepository();
             var query = rep.Query(dbKey).Where(exception);
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-             sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
         }
 
 
@@ -85,8 +82,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var rep = new ExpressTestRepository();
             var query = rep.Query(dbKey).Where(exception);
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-             sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
         }
     }
 }

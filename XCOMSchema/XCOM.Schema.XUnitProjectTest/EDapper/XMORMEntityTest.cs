@@ -16,7 +16,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
     public class XMORMEntityTest
     {
 
-        private readonly string filed = "SysNo AS SysNo,CompanyName AS CompanyName,CommonStatus AS CommonStatus,InUserSysNo AS InUserSysNo,InUserName AS IsDelete,InDate AS InDate,Amount AS Amount,EditDate AS EditDate,gid AS Gid";
+        private readonly string filed = "SysNo AS SysNo,CompanyName AS CompanyName,CommonStatus AS CommonStatus,InUserSysNo AS InUserSysNo,IsDelete AS IsDelete,InDate AS InDate,Amount AS Amount,EditDate AS EditDate,gid AS Gid";
 
         #region 枚举测试
 
@@ -29,8 +29,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.CommonStatus.Equals(CommonStatusType.Delete));
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected),SqlUtility.Processing(sql));
 
         }
         [Theory(DisplayName = "XMORMEntityTest")]
@@ -42,9 +41,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.CommonStatus.Equals((int)CommonStatusType.Delete));
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim()
-                , sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
-
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -57,8 +54,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.CommonStatus == CommonStatusType.Delete);
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
         [Theory(DisplayName = "XMORMEntityTest")]
@@ -70,8 +66,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.CommonStatus != CommonStatusType.Delete);
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -87,8 +82,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.IsDelete);
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -102,8 +96,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             !d.IsDelete);
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -116,8 +109,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.IsDelete == false);
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -134,8 +126,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.CompanyName.Length == 4);
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
         }
 
         [Theory(DisplayName = "XMORMEntityTest")]
@@ -148,8 +139,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.CompanyName.Length == code.Length + 4);
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -164,8 +154,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.CompanyName.Length.Equals(code.Length + 4));
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
         }
 
         #region 字符串测试
@@ -180,8 +169,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.CompanyName == "123");
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -196,8 +184,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             "123" == d.CompanyName);
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -211,8 +198,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.CompanyName.Equals("123"));
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -226,8 +212,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             "123".Equals(d.CompanyName));
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -243,8 +228,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             para.Equals(d.CompanyName));
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -259,8 +243,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.CompanyName.Equals(para));
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -275,8 +258,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             !d.CompanyName.Equals(para));
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -291,8 +273,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             !para.Equals(d.CompanyName));
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -307,8 +288,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.CompanyName.Contains(para));
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -324,8 +304,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             para.Contains(d.CompanyName));
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -341,8 +320,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             para.ToString().Contains(d.CompanyName));
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -357,8 +335,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.CompanyName.Contains(para.ToString()));
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -373,8 +350,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.CompanyName.Contains((para.ToString() + para2)));
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -390,8 +366,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             (para.ToString() + para2).Contains(d.CompanyName));
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -408,8 +383,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             (para.ToString() + para2).StartsWith(d.CompanyName));
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -425,8 +399,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.CompanyName.StartsWith((para.ToString() + para2)));
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -443,8 +416,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             (para.ToString() + para2).EndsWith(d.CompanyName));
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -461,8 +433,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.CompanyName.EndsWith((para.ToString() + para2)));
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -484,8 +455,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             para.Contains(d.CompanyName)
             );
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -505,8 +475,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             !para.Contains(d.CompanyName)
             );
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -522,8 +491,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             string.IsNullOrEmpty(d.CompanyName)
             );
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -537,8 +505,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             !string.IsNullOrEmpty(d.CompanyName)
             );
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -553,8 +520,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             string.IsNullOrWhiteSpace(d.CompanyName)
             );
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -568,8 +534,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             !string.IsNullOrWhiteSpace(d.CompanyName)
             );
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -584,8 +549,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             d.CompanyName == ValueUtility.GetString()
             ); ;
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
         #endregion
@@ -601,8 +565,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.SysNo == 1);
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -616,8 +579,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.SysNo != 1);
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -631,8 +593,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.SysNo > 1);
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -646,8 +607,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.SysNo >= 1);
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -662,8 +622,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.SysNo >= ValueUtility.GetInt());
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -684,8 +643,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             d.InDate >= ValueUtility.GetDateTime()
             );
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -699,8 +657,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             d.InDate.Equals(ValueUtility.GetDateTime())
             );
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -714,8 +671,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             ValueUtility.GetDateTime().Equals(d.InDate)
             );
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -731,8 +687,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             DateTime.Parse(dt).Equals(d.InDate)
             );
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -752,8 +707,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             d.Gid == ValueUtility.GetGuid()
             );
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -767,8 +721,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             d.Gid.Equals(ValueUtility.GetGuid())
             );
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -782,8 +735,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             ValueUtility.GetGuid().Equals(d.Gid)
             );
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -799,8 +751,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             ValueUtility.GetGuidConvert().Equals(d.Gid)
             );
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
@@ -824,8 +775,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             && (!d.CommonStatus.Equals(CommonStatusType.Valid) || (!d.IsDelete && d.Gid == ValueUtility.GetGuidConvert()))
              );
             var sql = query.DebugSql();
-            Assert.Equal(expected.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim(),
-                sql.Replace(" ", "").Replace("\r", "").Replace("\n", "").ToUpper().Trim());
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
         }
 
