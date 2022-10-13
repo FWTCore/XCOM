@@ -29,6 +29,6 @@ namespace XCOM.Schema.XUnitProjectTest.Model
         [XMColumn("EditDate")]
         public long? EditDate { get; set; }
         [XMColumn("Gid")]
-        public Guid? Gid { get; set; }
+        public Guid? Gid_Id { get; set; }
     }
 }

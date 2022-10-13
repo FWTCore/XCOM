@@ -24,10 +24,17 @@ namespace XCOM.Schema.EDapper.LTS
         /// 默认MySql
         /// </summary>
         private readonly XMProviderType DbType = XMProviderType.MySql;
-        public XMParserVisitor(XMProviderType dbType)
+        public XMParserVisitor(XMProviderType dbType, DynamicParameters parameters = null)
         {
-            Parameters = new DynamicParameters();
             DbType = dbType;
+            if (parameters != null)
+            {
+                Parameters = parameters;
+            }
+            else
+            {
+                Parameters = new DynamicParameters();
+            }
         }
 
         /// <summary>
@@ -580,8 +587,7 @@ namespace XCOM.Schema.EDapper.LTS
                     {
                         var fieldObject = this._fieldCondition.Pop();
                         var parser = XMRealization.GetPolymorphism(this.DbType);
-                        //node.Member.Name 是方名称
-                        var fieldName = parser.FunctionAnalysis(node.Member.Name, fieldObject.FieldName);
+                        var fieldName = parser.FunctionAnalysis(memberName, fieldObject.FieldName);
                         this._fieldCondition.Push(new FieldObject { FieldName = fieldName, FieldParameters = fieldObject.FieldParameters });
                     }
                     else

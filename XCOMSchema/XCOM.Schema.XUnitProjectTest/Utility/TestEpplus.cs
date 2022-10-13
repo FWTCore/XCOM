@@ -55,7 +55,7 @@ namespace XCOM.Schema.XUnitProjectTest.Utility
         {
             if (expression != null)
             {
-                Expression exp = expression.Body as Expression;
+                Expression exp = expression.Body;
                 var obj = new XMLambda(new DBConnection());
                 var resultSql = obj.VisitXMLambda(exp);
             }

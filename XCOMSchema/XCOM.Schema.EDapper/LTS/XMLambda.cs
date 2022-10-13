@@ -19,7 +19,7 @@ namespace XCOM.Schema.EDapper.LTS
         /// </summary>
         private readonly DBConnection _dbConfig;
 
-        public XMLambda(string connectionKey)
+        public XMLambda(string connectionKey, DynamicParameters parameters = null)
         {
             if (string.IsNullOrWhiteSpace(connectionKey))
             {
@@ -30,12 +30,26 @@ namespace XCOM.Schema.EDapper.LTS
             {
                 throw new Exception(string.Format("ConnectionKey:{0} 无效", connectionKey));
             }
-            Parameters = new DynamicParameters();
+            if (parameters != null)
+            {
+                Parameters = parameters;
+            }
+            else
+            {
+                Parameters = new DynamicParameters();
+            }
         }
-        public XMLambda(DBConnection dbConfig)
+        public XMLambda(DBConnection dbConfig, DynamicParameters parameters = null)
         {
             _dbConfig = dbConfig ?? throw new Exception("DBConnection 不能为空!");
-            Parameters = new DynamicParameters();
+            if (parameters != null)
+            {
+                Parameters = parameters;
+            }
+            else
+            {
+                Parameters = new DynamicParameters();
+            }
         }
 
         public string VisitXMLambda(Expression exp)

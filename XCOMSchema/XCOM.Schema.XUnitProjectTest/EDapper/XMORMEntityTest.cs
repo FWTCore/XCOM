@@ -16,7 +16,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
     public class XMORMEntityTest
     {
 
-        private readonly string filed = "SysNo AS SysNo,CompanyName AS CompanyName,CommonStatus AS CommonStatus,InUserSysNo AS InUserSysNo,IsDelete AS IsDelete,InDate AS InDate,Amount AS Amount,EditDate AS EditDate,gid AS Gid";
+        private readonly string filed = "SysNo AS SysNo,CompanyName AS CompanyName,CommonStatus AS CommonStatus,InUserSysNo AS InUserSysNo,IsDelete AS IsDelete,InDate AS InDate,Amount AS Amount,EditDate AS EditDate,Gid AS Gid_Id";
 
         #region 枚举测试
 
@@ -30,6 +30,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             d.CommonStatus.Equals(CommonStatusType.Delete));
             var sql = query.DebugSql();
             Assert.Equal(SqlUtility.Processing(expected),SqlUtility.Processing(sql));
+
 
         }
         [Theory(DisplayName = "XMORMEntityTest")]
@@ -704,7 +705,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var expected = $"select {filed} from express_test  where Gid = @Gid ORDER BY SysNo ";
             var rep = new ExpressTestRepository();
             var query = rep.Query(dbKey).Where(d =>
-            d.Gid == ValueUtility.GetGuid()
+            d.Gid_Id == ValueUtility.GetGuid()
             );
             var sql = query.DebugSql();
             Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
@@ -718,7 +719,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var expected = $"select {filed} from express_test  where Gid = @Gid ORDER BY SysNo ";
             var rep = new ExpressTestRepository();
             var query = rep.Query(dbKey).Where(d =>
-            d.Gid.Equals(ValueUtility.GetGuid())
+            d.Gid_Id.Equals(ValueUtility.GetGuid())
             );
             var sql = query.DebugSql();
             Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
@@ -732,7 +733,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var expected = $"select {filed} from express_test  where @Gid =Gid  ORDER BY SysNo ";
             var rep = new ExpressTestRepository();
             var query = rep.Query(dbKey).Where(d =>
-            ValueUtility.GetGuid().Equals(d.Gid)
+            ValueUtility.GetGuid().Equals(d.Gid_Id)
             );
             var sql = query.DebugSql();
             Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
@@ -748,7 +749,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var rep = new ExpressTestRepository();
             var dt = DateTime.Now.ToString();
             var query = rep.Query(dbKey).Where(d =>
-            ValueUtility.GetGuidConvert().Equals(d.Gid)
+            ValueUtility.GetGuidConvert().Equals(d.Gid_Id)
             );
             var sql = query.DebugSql();
             Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
@@ -772,7 +773,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             (d.CommonStatus.Equals((int)CommonStatusType.Valid) || d.IsDelete)
             && (d.CommonStatus.Equals(CommonStatusType.Valid) && (!string.IsNullOrWhiteSpace(d.CompanyName) || string.IsNullOrEmpty(d.CompanyName)))
-            && (!d.CommonStatus.Equals(CommonStatusType.Valid) || (!d.IsDelete && d.Gid == ValueUtility.GetGuidConvert()))
+            && (!d.CommonStatus.Equals(CommonStatusType.Valid) || (!d.IsDelete && d.Gid_Id == ValueUtility.GetGuidConvert()))
              );
             var sql = query.DebugSql();
             Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));

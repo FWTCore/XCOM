@@ -72,10 +72,10 @@ namespace XCOM.Schema.EDapper.Realization
         {
             if (expression != null)
             {
-                Expression exp = expression.Body as Expression;
-                var obj = new XMLambda(this._dbConfig);
+                Expression exp = expression.Body;
+                var obj = new XMLambda(this._dbConfig, this.Model.Parameters);
                 var resultSql = obj.VisitXMLambda(exp);
-                this.Model.Parameters.AddDynamicParams(obj.Parameters);
+                this.Model.Parameters = obj.Parameters;
                 if (this.Model.Where.Length > 0)
                 {
                     this.Model.Where.Append(" and ");
@@ -92,10 +92,10 @@ namespace XCOM.Schema.EDapper.Realization
         {
             if (expression != null)
             {
-                Expression exp = expression.Body as Expression;
-                var obj = new XMLambda(this._dbConfig);
+                Expression exp = expression.Body;
+                var obj = new XMLambda(this._dbConfig, this.Model.Parameters);
                 var resultSql = obj.VisitXMLambda(exp);
-                this.Model.Parameters.AddDynamicParams(obj.Parameters);
+                this.Model.Parameters = obj.Parameters;
                 if (this.Model.Set.Length > 0)
                 {
                     this.Model.Set.Append(" , ");
