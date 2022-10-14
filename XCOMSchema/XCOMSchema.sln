@@ -9,22 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XCOM.Schema.Standard", "XCO
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XCOM.Schema.EDapper", "XCOM.Schema.EDapper\XCOM.Schema.EDapper.csproj", "{F1236C03-15A8-4BEB-8962-C32499300B5C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D03289D3-3978-48AA-B00D-51150F64099D}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XCOM.Schema.XUnitProjectTest", "XCOM.Schema.XUnitProjectTest\XCOM.Schema.XUnitProjectTest.csproj", "{AD62B297-6B2C-468D-A5E3-F9D30DA651B1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PresentationLayer", "PresentationLayer", "{20F80701-62C5-4661-A842-2F30F7D52422}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGeneration", "CodeGeneration\CodeGeneration.csproj", "{34219F7E-2B65-4804-8E58-305416771142}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{D7DF4C9E-1E87-42A8-97AB-03F9D27BD97F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XCOM.Schema.Core", "XCOM.Schema.Core\XCOM.Schema.Core.csproj", "{4C39A9C4-5043-44ED-BCAC-5953B7C65C07}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication2", "WebApplication2\WebApplication2.csproj", "{AA8387B1-5A55-4124-9B2F-28FA2CCDC93F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,26 +43,16 @@ Global
 		{34219F7E-2B65-4804-8E58-305416771142}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34219F7E-2B65-4804-8E58-305416771142}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34219F7E-2B65-4804-8E58-305416771142}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D7DF4C9E-1E87-42A8-97AB-03F9D27BD97F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D7DF4C9E-1E87-42A8-97AB-03F9D27BD97F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D7DF4C9E-1E87-42A8-97AB-03F9D27BD97F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D7DF4C9E-1E87-42A8-97AB-03F9D27BD97F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4C39A9C4-5043-44ED-BCAC-5953B7C65C07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4C39A9C4-5043-44ED-BCAC-5953B7C65C07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C39A9C4-5043-44ED-BCAC-5953B7C65C07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C39A9C4-5043-44ED-BCAC-5953B7C65C07}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AA8387B1-5A55-4124-9B2F-28FA2CCDC93F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AA8387B1-5A55-4124-9B2F-28FA2CCDC93F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AA8387B1-5A55-4124-9B2F-28FA2CCDC93F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AA8387B1-5A55-4124-9B2F-28FA2CCDC93F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{34219F7E-2B65-4804-8E58-305416771142} = {20F80701-62C5-4661-A842-2F30F7D52422}
-		{D7DF4C9E-1E87-42A8-97AB-03F9D27BD97F} = {20F80701-62C5-4661-A842-2F30F7D52422}
-		{AA8387B1-5A55-4124-9B2F-28FA2CCDC93F} = {20F80701-62C5-4661-A842-2F30F7D52422}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B835C49-2A1C-4CBF-B980-A0CA7D3A47B8}
