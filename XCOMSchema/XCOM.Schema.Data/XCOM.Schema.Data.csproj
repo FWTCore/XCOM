@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>F:\01Repository\XCOM\XCOMSchema\XCOM.Schema.Data\SwaggerSchemaData.xml</DocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="SwaggerSchemaData.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>
