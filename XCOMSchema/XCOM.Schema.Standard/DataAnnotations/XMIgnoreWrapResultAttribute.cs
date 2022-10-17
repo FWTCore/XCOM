@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace XCOM.Schema.Standard.DataAnnotations
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
     public class XMIgnoreWrapResultAttribute : Attribute
     {
     }
