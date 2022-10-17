@@ -41,6 +41,7 @@ namespace CodeGeneration.Model
         NVARCHAR,
         CHAR,
 
+        TINYINT,
         INT,
         INTEGER,
         SMALLINT,

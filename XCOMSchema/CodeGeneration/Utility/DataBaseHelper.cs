@@ -14,8 +14,9 @@ namespace CodeGeneration.Utility
         /// </summary>
         /// <param name="type"></param>
         /// <param name="isNull"></param>
+        /// <param name="numericPrecision"></param>
         /// <returns></returns>
-        public static string GetFieldType(string type, bool isNull)
+        public static string GetFieldType(string type, bool isNull, int? numericPrecision)
         {
             string newType = "string";
             switch (type.ToUpper())
@@ -25,6 +26,13 @@ namespace CodeGeneration.Utility
                 case nameof(DBFieldTypeEnum.NVARCHAR):
                 case nameof(DBFieldTypeEnum.CHAR):
                     newType = "string";
+                    break;
+                case nameof(DBFieldTypeEnum.TINYINT):
+                    if (numericPrecision.HasValue && numericPrecision == 1)
+                        newType = "bool";
+                    else
+                        newType = "byte";
+                    if (isNull) newType = newType + "?";
                     break;
                 case nameof(DBFieldTypeEnum.INT):
                 case nameof(DBFieldTypeEnum.INTEGER):

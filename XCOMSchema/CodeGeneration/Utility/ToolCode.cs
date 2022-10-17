@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XCOM.Schema.EDapper.DataAccess;
 using XCOM.Schema.EDapper.SQLClient;
+using XCOM.Schema.Standard.Extension;
 using XCOM.Schema.Standard.Utility;
 
 namespace CodeGeneration.Utility
@@ -21,12 +22,26 @@ namespace CodeGeneration.Utility
             string spaceNamePrefix,
             string filePath)
         {
-            var cmd = new XMSqlCommand($"GetColumnList_{db.DBType}", db.Key);
-            cmd.SetParameter("dbName", dbName);
-            cmd.SetParameter("Tablenames", tableNames);
-            List<TableColumnNameEntity> columnsDataList = cmd.Query<TableColumnNameEntity>().ToList();
             if ((builderType & BuilderType.BuilderEntity) == BuilderType.BuilderEntity)
             {
+                var cmd = new XMSqlCommand($"GetColumnList_{db.DBType}", db.Key);
+                cmd.SetParameter("dbName", dbName);
+                cmd.SetParameter("Tablenames", tableNames);
+                List<TableColumnNameEntity> columnsDataList = cmd.Query<TableColumnNameEntity>().ToList();
+                if (db.DBProviderType == XMProviderType.MySql)
+                {
+                    columnsDataList.ForEach(data =>
+                    {
+                        if (data.NumericPrecision.HasValue)
+                        {
+                            var match = data.NumericPrecisionStr.MatchSingle("[0-9]+");
+                            if (!string.IsNullOrWhiteSpace(match.Value))
+                            {
+                                data.NumericPrecision = int.Parse(match.Value);
+                            }
+                        }
+                    });
+                }
                 BuilderEntity(columnsDataList, tableList, spaceNamePrefix, filePath);
             }
             if ((builderType & BuilderType.BuilderService) == BuilderType.BuilderService)
@@ -75,7 +90,7 @@ namespace CodeGeneration.Utility
                     {
                         entityContent.AppendLine($"\t\t[XMDatabaseGenerated]");
                     }
-                    string type = DataBaseHelper.GetFieldType(citem.DataType, citem.IsNullable);
+                    string type = DataBaseHelper.GetFieldType(citem.DataType, citem.IsNullable, citem.NumericPrecision);
                     string fieldName = UNCHelper.GenVarName(citem.ColumnName);
                     entityContent.AppendLine($"\t\t[XMColumn(\"{citem.ColumnName}\")]");
                     entityContent.AppendLine($"\t\tpublic {type} {fieldName} {{ get; set; }}").Append("\n");
@@ -160,7 +175,7 @@ namespace CodeGeneration.Utility
                 entityContent.AppendLine("using System.Collections.Generic;");
                 entityContent.AppendLine("using System.Text;");
                 entityContent.AppendLine("using XCOM.Schema.EDapper.SQLClient;").Append('\n');
-   
+
                 entityContent.AppendLine($"namespace {spaceNamePrefix}Repository");
                 entityContent.AppendLine("{");
                 entityContent.AppendLine("\t/// <summary>");
@@ -181,7 +196,7 @@ namespace CodeGeneration.Utility
                 entityContent.AppendLine("using System.Collections.Generic;");
                 entityContent.AppendLine("using System.Text;");
                 entityContent.AppendLine("using XCOM.Schema.EDapper.SQLClient;").Append('\n');
-   
+
                 entityContent.AppendLine($"namespace {spaceNamePrefix}IRepository");
                 entityContent.AppendLine("{");
                 entityContent.AppendLine("\t/// <summary>");

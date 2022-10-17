@@ -48,6 +48,11 @@ namespace CodeGeneration.Model
         /// 备注
         /// </summary>
         public string ColumnComment { get; set; }
+        /// <summary>
+        /// 字符长度字符串
+        /// MYSQL获取准的数字长度
+        /// </summary>
+        public string NumericPrecisionStr { get; set; }
 
 
     }
