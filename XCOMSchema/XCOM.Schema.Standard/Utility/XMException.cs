@@ -10,6 +10,10 @@ namespace XCOM.Schema.Standard.Utility
     [Serializable]
     public class XMException : Exception
     {
+        /// <summary>
+        /// 编码
+        /// </summary>
+        public string Code { get; set; }
         public XMException()
         {
         }
@@ -19,10 +23,22 @@ namespace XCOM.Schema.Standard.Utility
         {
             XMLog.Error(message, () => { });
         }
+        public XMException(string code, string message)
+         : base(message)
+        {
+            Code = code;
+            XMLog.Error(message, () => { });
+        }
 
         public XMException(string messageFormat, params object[] args)
             : base(string.Format(messageFormat, args))
         {
+            XMLog.Error(string.Format(messageFormat, args), () => { });
+        }
+        public XMException(string code, string messageFormat, params object[] args)
+            : base(string.Format(messageFormat, args))
+        {
+            Code = code;
             XMLog.Error(string.Format(messageFormat, args), () => { });
         }
 
@@ -36,6 +52,16 @@ namespace XCOM.Schema.Standard.Utility
             }
         }
 
+        public XMException(string code, string message, Exception innerException)
+            : base(message, innerException)
+        {
+            Code = code;
+            //只记录最原始的Exception信息
+            if (!(innerException is XMException))
+            {
+                XMLog.Error(message, innerException, () => { });
+            }
+        }
 
         /// <summary>
         /// 实现ISerialization接口所需要的反序列化构造函数。
