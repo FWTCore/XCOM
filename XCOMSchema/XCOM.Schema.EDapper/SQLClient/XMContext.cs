@@ -85,7 +85,7 @@ namespace XCOM.Schema.EDapper.SQLClient
         public IXMUpdateable<T> Update(string connectionKey)
         {
             StructureDBConnection(connectionKey);
-            var result = (IXMUpdateable<T>)GetReflectionObj("IXMUpdateable");
+            var result = (IXMUpdateable<T>)GetReflectionObj("XMUpdateable");
             return result;
         }
 

@@ -629,7 +629,7 @@ namespace XCOM.Schema.EDapper.LTS
                 else
                 {
                     // 对参数有运算，先解析数据库运算
-                    if (node.Type == typeof(Int32) && this._fieldCondition.Count == 1)
+                    if (node.Type == typeof(Int32) && memberName == "Length")
                     {
                         var fieldObject = this._fieldCondition.Pop();
                         var parser = XMRealization.GetPolymorphism(this.DbType);

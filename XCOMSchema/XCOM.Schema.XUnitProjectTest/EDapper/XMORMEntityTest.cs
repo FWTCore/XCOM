@@ -29,7 +29,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var query = rep.Query(dbKey).Where(d =>
             d.CommonStatus.Equals(CommonStatusType.Delete));
             var sql = query.DebugSql();
-            Assert.Equal(SqlUtility.Processing(expected),SqlUtility.Processing(sql));
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
 
         }
@@ -460,6 +460,61 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
 
         }
 
+
+        [Theory(DisplayName = "XMORMEntityTest")]
+        [InlineData("localhost")]
+        public void ORMFiled_Contains_Param_In_obj(string dbKey)
+        {
+            var expected = $"select {filed} from express_test  where CompanyName in @CompanyName  ORDER BY SysNo ";
+            var rep = new ExpressTestRepository();
+
+            var ddd = new ttt()
+            {
+                id = 1,
+                fields = new List<string>
+                {
+                    "123",
+                    "456",
+                    "789"
+                }
+            };
+            var query = rep.Query(dbKey).Where(d =>
+            ddd.fields.Contains(d.CompanyName)
+            );
+            var sql = query.DebugSql();
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
+
+
+        }
+
+
+
+        [Theory(DisplayName = "XMORMEntityTest")]
+        [InlineData("localhost")]
+        public void ORMFiled_Contains_Param_In_obj_int(string dbKey)
+        {
+            var expected = $"select {filed} from express_test  where SysNo in @SysNo  ORDER BY SysNo ";
+            var rep = new ExpressTestRepository();
+
+            var ddd = new ttt()
+            {
+                id = 1,
+                fieldIds = new List<int>
+                {
+                    1,
+                    2,
+                    3
+                }
+            };
+            var query = rep.Query(dbKey).Where(d =>
+            ddd.fieldIds.Contains(d.SysNo)
+            );
+            var sql = query.DebugSql();
+            Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
+
+
+        }
+
         [Theory(DisplayName = "XMORMEntityTest")]
         [InlineData("localhost")]
         public void ORMFiled_Contains_Param_notIn(string dbKey)
@@ -547,7 +602,7 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var rep = new ExpressTestRepository();
             var query = rep.Query(dbKey).Where(d =>
             d.InUserSysNo == null && !string.IsNullOrWhiteSpace(d.CompanyName)
-            ); 
+            );
             var sql = query.DebugSql();
             Assert.Equal(SqlUtility.Processing(expected), SqlUtility.Processing(sql));
 
@@ -842,7 +897,12 @@ namespace XCOM.Schema.XUnitProjectTest.EDapper
             var sql = query.DebugSql();
         }
 
-
+        class ttt
+        {
+            public int id { get; set; }
+            public List<string> fields { get; set; }
+            public List<int> fieldIds { get; set; }
+        }
 
     }
 }
