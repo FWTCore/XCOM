@@ -84,7 +84,7 @@ namespace XCOM.Schema.EDapper.Realization
             {
                 Expression exp = expression.Body;
 
-                var obj = new XMLambda(this._dbConfig);
+                var obj = new XMLambda(this._dbConfig, this.Model.Parameters);
                 var resultSql = obj.VisitXMLambda(exp);
                 this.Model.Parameters = obj.Parameters;
                 if (this.Model.Where.Length > 0)
@@ -110,7 +110,7 @@ namespace XCOM.Schema.EDapper.Realization
             {
                 Expression exp = expression.Body;
 
-                var obj = new XMLambda(this._dbConfig);
+                var obj = new XMLambda(this._dbConfig, this.Model.Parameters);
                 var resultSql = obj.VisitXMLambda(exp);
                 this.Model.Parameters = obj.Parameters;
                 if (this.Model.Where.Length > 0)

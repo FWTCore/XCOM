@@ -54,7 +54,7 @@ namespace XCOM.Schema.EDapper.LTS
 
         public string VisitXMLambda(Expression exp)
         {
-            var visitor = new XMParserVisitor(this._dbConfig.DBProviderType);
+            var visitor = new XMParserVisitor(this._dbConfig.DBProviderType, this.Parameters);
             visitor.Visit(exp);
             this.Parameters = visitor.Parameters;
             return visitor.GetConditionSql();
