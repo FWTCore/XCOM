@@ -223,8 +223,9 @@ namespace XCOM.Schema.EDapper.Realization
             reuslt.PageIndex = request.PageIndex;
             reuslt.PageSize = request.PageSize;
 
-            reuslt.TotalCount = Count();
-            reuslt.Items = ToList();
+            var pageData = PageQuery();
+            reuslt.TotalCount = pageData.Item1;
+            reuslt.Items = pageData.Item2;
 
             return reuslt;
         }
@@ -336,6 +337,29 @@ namespace XCOM.Schema.EDapper.Realization
                     this.Model.FetchCount = 15;
                 }
             }
+        }
+
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <returns></returns>
+        private (long, List<T>) PageQuery()
+        {
+            var sql = new StringBuilder(this.GetCountSql());
+            sql.AppendLine(";");
+            sql.AppendLine(this.GetResultSql());
+            sql.AppendLine(";");
+
+            var count = 0L;
+            var data = new List<T>();
+            this.XMDBSql.QueryMultiple(sql.ToString(), this.Model.Parameters
+               , reader =>
+               {
+                   count = reader.ReadFirstOrDefault<long>();
+                   data = reader.Read<T>().ToList();
+               });
+
+            return (count, data);
         }
 
         public string DebugSql()

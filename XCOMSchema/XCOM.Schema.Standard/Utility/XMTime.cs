@@ -87,7 +87,17 @@ namespace XCOM.Schema.Standard.Utility
             long timeStamp = (long)(endTime - startTime).TotalSeconds; // 相差秒数
             return timeStamp;
         }
-
+        /// <summary>
+        /// 两个时间的毫秒数
+        /// </summary>
+        /// <param name="time1"></param>
+        /// <param name="time2"></param>
+        /// <returns></returns>
+        public static long TimeDifferenceMilliseconds(DateTime startTime, DateTime endTime)
+        {
+            long timeStamp = (long)(endTime - startTime).TotalMilliseconds; // 相差秒数
+            return timeStamp;
+        }
 
     }
 }

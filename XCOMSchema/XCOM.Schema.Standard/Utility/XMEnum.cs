@@ -22,6 +22,10 @@ namespace XCOM.Schema.Standard.Utility
         {
             try
             {
+                if (!Enum.IsDefined(typeof(T), name))
+                {
+                    throw new Exception($"值:{name}不是枚举{typeof(T).Name}的值");
+                }
                 return (T)Enum.Parse(typeof(T), name);
             }
             catch (Exception ex)
@@ -47,6 +51,10 @@ namespace XCOM.Schema.Standard.Utility
                 var ret = 0;
                 foreach (var item in emobjects)
                 {
+                    if (!Enum.IsDefined(typeof(T), item))
+                    {
+                        throw new Exception($"值:{item}不是枚举{typeof(T).Name}的值");
+                    }
                     ret |= item;
                 }
                 return (T)Enum.ToObject(typeof(T), ret);

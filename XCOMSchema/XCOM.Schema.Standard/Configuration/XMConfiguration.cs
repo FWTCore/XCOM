@@ -14,6 +14,14 @@ namespace XCOM.Schema.Standard.Configuration
             _configuration = new ConfigurationBuilder().SetBasePath(AppContext.BaseDirectory).AddJsonFile("appsettings.json", true, true).Build();
         }
 
+        public static void Instance(string environmentName)
+        {
+            var fileName = "appsettings.json";
+            if (!string.IsNullOrWhiteSpace(environmentName) && environmentName != "Production")
+                fileName = $"appsettings.{environmentName}.json";
+            _configuration = new ConfigurationBuilder().SetBasePath(AppContext.BaseDirectory).AddJsonFile(fileName, true, true).Build();
+
+        }
         /// <summary>
         /// 获取配置值
         /// </summary>
