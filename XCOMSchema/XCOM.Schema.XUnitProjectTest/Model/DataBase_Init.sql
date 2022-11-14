@@ -12,6 +12,6 @@ create table `express`
    organization_name    varchar(100) default NULL comment '组织名称',
    appeal_max_times     int not null comment '申诉最大次数',
    appeal_max_day       int not null comment '申诉最大天数',
-   primary key (id)
+   primary key (SysNo)
 )
-ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='评级配置表';
+ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COMMENT='评级配置表';
